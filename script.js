@@ -1,4 +1,4 @@
-import NotiToast from "./noti-toast.js";
+import NotiToast from "./src/noti-toast.js";
 
 document.querySelector('button').addEventListener('click', ()=>{
 	const toast = new NotiToast({
