@@ -1,0 +1,77 @@
+.ntl-toast{
+    box-sizing: border-box;
+    padding: .75rem;
+    background-color: var(--background-color, white);
+    border: var(--border, 1px solid #333);
+    border-radius: .25em;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    opacity: 0;
+}
+.ntl-toast.ntl-animated{
+    transition: var(--transition_type) calc( 1ms * var(--time_ms, 500)) ease-in-out;
+}
+.ntl-toast.ntl-can-close::after{
+    content: "\00D7";
+    position: absolute;
+    top: 2px;
+    right: 5px;
+}
+.ntl-toast.ntl-progress-bar::before{
+    content: "";
+    position: absolute;
+    height: 2px;
+    width: calc( 100% * var(--progress_bar_length, 0) );
+    background-color: #0e6647;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.ntl-toast-container{
+    position: fixed;
+    margin: 10px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.ntl-toast-container[data-position^="top-"] {
+    top: 0;
+}
+.ntl-toast-container[data-position^="bottom-"] {
+    bottom: 0;
+}
+.ntl-toast-container[data-position$="-right"] {
+    right: 0;
+}
+.ntl-toast-container[data-position$="-left"] {
+    left: 0;
+}
+.ntl-toast-container[data-position$="-center"] {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ntl-toast-container[data-position$="-right"] .ntl-toast.ntl-animated {
+    transform: translateX( calc( 1% * var(--translate_value , 110)));
+}
+.ntl-toast-container[data-position$="-left"] .ntl-toast.ntl-animated {
+    transform: translateX( calc( -1% * var(--translate_value , 110)));
+ }
+.ntl-toast-container[data-position="top-center"] .ntl-toast.ntl-animated {
+    transform: translateY( calc( -1vh * var(--translate_value , 110)));
+}
+.ntl-toast-container[data-position="bottom-center"] .ntl-toast.ntl-animated {
+    transform: translateY( calc( 1vh * var(--translate_value , 110)));
+}
+
+.ntl-toast-container .ntl-toast.ntl-animated.ntl-slide {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+.ntl-toast-container .ntl-toast.ntl-animated.ntl-fade {
+    opacity: 1;
+}
