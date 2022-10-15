@@ -23,24 +23,24 @@ export default class NotiToast {
 
 	#toastElem; //ok
 
-	#checkVisibilityState = ()=>{}; //visibilityChange
+	#checkVisibilityState = ()=>{};
 
-	#autoClose_duration; //autoClose
-	#autoClose_elapsedTime; //timeVisible
-	#autoClose_animationFrame; //autoCloseInterval
+	#autoClose_duration;
+	#autoClose_elapsedTime;
+	#autoClose_animationFrame;
 
 	#progressBarLength = 1;
-	#progressBar_animationFrame; //progressInterval
+	#progressBar_animationFrame;
 
-	#removeBinded; //ok
+	#removeBinded;
 
 	#animated;
 	#animationClass;
 	#animation_animationFrame;
 	#dinamyc_remove_event;
 
-	#isNotPaused = true; //isPaused
-	#isReturningFromPause = false; //shouldUnPause
+	#isNotPaused = true;
+	#isReturningFromPause = false;
 
 	/*endregion*/
 	constructor(options) {
