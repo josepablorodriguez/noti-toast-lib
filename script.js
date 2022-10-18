@@ -1,24 +1,34 @@
-import NotiToast from "./noti-toast.js";
+import NotiToast from "./src/noti-toast.js";
+import jsonToHTML from "./lib/jsonToHTMLParser.js";
 
 document.querySelector('button').addEventListener('click', ()=>{
-	const toast = new NotiToast({
-		text: "BYE",
-		html: `<div><u>Greet:</u></div><div>Hi, toast!</div>`,
-		//autoClose: 2000,
-		//canClose: false,
-		//position: 'top-right',
-		style: {
-			'background-color': 'yellow',
-			border: '4px solid #999',
-		},
-		//onClose: ()=>{ alert("hola"); },
-		//showProgressBar: false,
-		//pauseOnHover: false,
-		//pauseOnFocusLoss: false,
-		animation: {
-			type: 'slide',
-			duration_ms: 2000,
-		},
-		//animation: false,
-	});
+	const nodes = document.querySelectorAll('.configuration-settings > .node');
+
+	let configFile = getConfigFile(nodes),
+		code = document.getElementsByTagName('code')[0];
+
+	const jsonTohtml = new jsonToHTML(/*{debug: true}*/);
+	jsonTohtml.parse(configFile).insertInto(code);
+
+	const toast1 = new NotiToast(configFile);
+
 });
+function getConfigFile(nodes){
+	let configFile = {};
+
+	nodes.forEach((node)=>{
+		const chkbx = node.querySelector('input[type="checkbox"]');
+		if(chkbx.checked){
+			configFile[ chkbx.id ] = (()=>{
+				const lastChild = node.lastElementChild;
+
+				if(lastChild.tagName !== 'DIV')
+					return lastChild.value;
+
+				const subNodes = lastChild.querySelectorAll('.node');
+				return getConfigFile(subNodes);
+			})();
+		}
+	});
+	return configFile;
+}

@@ -41,18 +41,21 @@
 .ntl-toast-container[data-position^="top-"] {
     top: 0;
 }
+.ntl-toast-container[data-position^="middle"] {
+    top: 50%;
+}
 .ntl-toast-container[data-position^="bottom-"] {
     bottom: 0;
 }
 .ntl-toast-container[data-position$="-right"] {
     right: 0;
 }
-.ntl-toast-container[data-position$="-left"] {
-    left: 0;
-}
 .ntl-toast-container[data-position$="-center"] {
     left: 50%;
     transform: translateX(-50%);
+}
+.ntl-toast-container[data-position$="-left"] {
+    left: 0;
 }
 
 .ntl-toast-container[data-position$="-right"] .ntl-toast.ntl-animated {
@@ -60,7 +63,7 @@
 }
 .ntl-toast-container[data-position$="-left"] .ntl-toast.ntl-animated {
     transform: translateX( calc( -1% * var(--translate_value , 110)));
- }
+}
 .ntl-toast-container[data-position="top-center"] .ntl-toast.ntl-animated {
     transform: translateY( calc( -1vh * var(--translate_value , 110)));
 }

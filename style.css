@@ -1,0 +1,39 @@
+.configuration-settings {
+    width: 70%;
+    background-color: #cccccc;
+}
+.configuration-json {
+    width: 70%;
+    background-color: #1f2937;
+}
+.node {
+    padding: .5rem;
+}
+.sub-node {
+    width: 95% !important;
+    padding-left: 1.5rem;
+    background-color: #bbbbbb;
+    overflow: hidden;
+}
+.index{
+
+}
+.value{
+    width: 70%;
+}
+.node:has(.index[type="checkbox"]) > .value  {
+    display: none;
+}
+.node:has(.index[type="checkbox"]:checked) > .value  {
+    display: block;
+}
+
+label {
+    cursor: pointer;
+}
+textarea {
+    height: 100px;
+}
+input[type="checkbox"] {
+    accent-color: #7ec699;
+}

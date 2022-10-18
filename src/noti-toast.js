@@ -1,13 +1,16 @@
+import funcParser from "../lib/parseFunction.js";
+
 const DEFAULT_OPTIONS = {
-	text: 'Hello, Toast!',
-	html: '',
+	debug: false,
+	text: undefined,
+	html: undefined,
 	position: 'top-right',
 	style: {
 		'background-color': 'darkseagreen',
-		border: '2px solid #333',
+		'border': '2px solid #333',
 	},
 	canClose: true,
-	autoClose: 25000,
+	autoClose: 5000,
 	onClose: ()=>{},
 	showProgressBar: true,
 	pauseOnHover: true,
@@ -20,11 +23,11 @@ const DEFAULT_OPTIONS = {
 
 export default class NotiToast {
 	/*region PRIVATE VARS*/
-
-	#toastElem; //ok
+	#toastElem;
 
 	#checkVisibilityState = ()=>{};
 
+	#onClose = ()=>{};
 	#autoClose_duration;
 	#autoClose_elapsedTime;
 	#autoClose_animationFrame;
@@ -37,13 +40,15 @@ export default class NotiToast {
 	#animated;
 	#animationClass;
 	#animation_animationFrame;
-	#dinamyc_remove_event;
+	#dynamic_remove_event;
 
 	#isNotPaused = true;
 	#isReturningFromPause = false;
 
+	#debug;
 	/*endregion*/
 	constructor(options) {
+		this.update({'debug': options['debug']})
 		this.create();
 		this.init();
 		this.update( {...DEFAULT_OPTIONS, ...options} );
@@ -51,10 +56,12 @@ export default class NotiToast {
 
 	/*region SETTERS*/
 	set text(value){
-		this.#toastElem.textContent = value;
+		if(undefined !== value && null !== value && value.length > 0)
+			this.#toastElem.textContent = value;
 	}
 	set html(value){
-		this.#toastElem.innerHTML = value;
+		if(undefined !== value && null !== value && value.length > 0)
+			this.#toastElem.innerHTML = value;
 	}
 	set style(value){
 		Object.entries( value ).forEach(([property, value]) => {
@@ -70,6 +77,12 @@ export default class NotiToast {
 		toast_container.append(this.#toastElem);
 		if(null === current_toast_container || current_toast_container.hasChildNodes()) return;
 		current_toast_container.remove();
+	}
+	set onClose(value){
+		if(typeof value === 'string')
+			value = funcParser(value);
+		if(typeof value === 'function')
+			this.#onClose = value;
 	}
 	set canClose(value){
 		this.#toastElem.classList.toggle('ntl-can-close', value);
@@ -101,7 +114,7 @@ export default class NotiToast {
 				this.#autoClose_elapsedTime += currentAnimationFrameTime - lastExecutionTime;
 				this.#progressBarLength = 1 - ( this.#autoClose_elapsedTime / this.#autoClose_duration );
 				if(this.#autoClose_elapsedTime >= this.#autoClose_duration){
-					this.#toastElem.dispatchEvent(this.#dinamyc_remove_event);
+					this.#toastElem.dispatchEvent(this.#dynamic_remove_event);
 					return;
 				}
 			}
@@ -188,42 +201,48 @@ export default class NotiToast {
 			document.removeEventListener("visibilitychange", this.#checkVisibilityState)
 		}
 	}
+	set debug(value){
+		if(typeof value === 'string')
+			value = (value === 'true');
+		if(typeof value === 'boolean')
+			this.#debug = value;
+	}
 	/*endregion*/
 
 	/*region METHODS*/
 	init(){
-		console.group('INIT()');
+		if(this.#debug) console.group('INIT()');
 		this.#removeBinded = this.remove.bind(this);
 
 		this.#checkVisibilityState = ()=>{
 			this.#isReturningFromPause = document.visibilityState === "visible";
 		};
-		console.groupEnd();
+		if(this.#debug) console.groupEnd();
 	}
 	create(){
-		console.group('CREATE()');
+		if(this.#debug) console.group('CREATE()');
 		this.#toastElem = document.createElement('div');
 		this.#toastElem.classList.add('ntl-toast');
-		console.groupEnd();
+		if(this.#debug) console.groupEnd();
 	}
 	update(options){
-		console.group('UPDATE()');
-		let can_close, auto_close;
+		let can_close = false, auto_close = false;
 		Object.entries( options ).forEach(([key, value]) => {
 			this[key] = value;
 			if(key === 'canClose') can_close = value;
 			if(key === 'autoClose') auto_close = value;
 		});
-		if(!can_close && !auto_close) {
-			this.canClose = true;
+		if(this.#debug) console.group('UPDATE()');
+		if(!can_close && !auto_close && undefined !== this['canClose']) {
+			this['canClose'] = true;
 			ntlConsoleWarning({
 				message: 'autoClose and canClose were both set to false. To prevent undesire behaviour canClose has been set to TRUE.',
 			});
 		}
-		console.groupEnd();
+		if(this.#debug) console.groupEnd();
 	}
 	triggerCloseAnimationOn(event){
-		this.#dinamyc_remove_event = new Event(event);
+		this.#dynamic_remove_event = new Event(event);
 		this.#toastElem.addEventListener(event, ()=>{
 			if(this.#animated) {
 				this.#toastElem.classList.remove(this.#animationClass);
@@ -246,15 +265,16 @@ export default class NotiToast {
 		}
 	}
 	remove(){
-		console.group('REMOVE()');
+		if(this.#debug) console.group('REMOVE()');
 		const toast_container = this.#toastElem.parentElement;
 		cancelAnimationFrame(this.#animation_animationFrame);
 		cancelAnimationFrame(this.#progressBar_animationFrame);
 		cancelAnimationFrame(this.#autoClose_animationFrame);
 
 		this.#toastElem.remove();
-		this.onClose();
-		console.groupEnd();
+		this.#onClose();
+
+		if(this.#debug) console.groupEnd();
 		if(toast_container.hasChildNodes()) return;
 		toast_container.remove();
 	}
