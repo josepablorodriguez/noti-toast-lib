@@ -7,8 +7,8 @@ document.querySelector('button').addEventListener('click', ()=>{
 	let configFile = getConfigFile(nodes),
 		code = document.getElementsByTagName('code')[0];
 
-	const jsonTohtml = new jsonToHTML(/*{debug: true}*/);
-	jsonTohtml.parse(configFile).insertInto(code);
+	const jsonToHtml = new jsonToHTML(/*{debug: true}*/);
+	jsonToHtml.parse(configFile).insertInto(code);
 
 	const toast1 = new NotiToast(configFile);
 
