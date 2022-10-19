@@ -1,5 +1,5 @@
-import NotiToast from "./src/noti-toast.js";
-import jsonToHTML from "./lib/jsonToHTMLParser.js";
+import NotiToast from './src/noti-toast.js';
+import jsonToHTML from './lib/jsonToHTMLParser.js';
 
 document.querySelector('button').addEventListener('click', ()=>{
 	const nodes = document.querySelectorAll('.configuration-settings > .node');
