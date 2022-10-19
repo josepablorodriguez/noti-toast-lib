@@ -53,8 +53,12 @@ button2.addEventListener('click', ()=>{
 ```
 
 ## Demo
-[Go to Demo](https://google.com)
+[Go to Demo [under construction]](https://google.com)
 
+## Roadmap
+These are some of the future features you can expect from the Noti-Toast library:
+1. Live demo available. (*play around with the configuration file to see the resulting Toast*)
+2. Templates. (*pre-defined standard toast for success, warning, info and error*)
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
