@@ -42,13 +42,13 @@ button1.addEventListener('click', ()=>{
     notiToast = new NotiToast(notiToast_config);
 });
 button2.addEventListener('click', ()=>{
-	// set HTML content to add to the Noti-Toast
-	notiToast_config.html = '<div><u>Title</u></div><div>Content Here!</div>';
-	// define duration in milliseconds
-	notiToast_config.autoClose = 5000;
-	// update the Noti-Toast object already created
+    // set HTML content to add to the Noti-Toast
+    notiToast_config.html = '<div><u>Title</u></div><div>Content Here!</div>';
+    // define duration in milliseconds
+    notiToast_config.autoClose = 5000;
+    // update the Noti-Toast object already created
     notiToast.update(notiToast_config);
-	// NOTE: the HTML property takes presedence over the TEXT property
+    // NOTE: the HTML property takes presedence over the TEXT property
 });
 ```
 
