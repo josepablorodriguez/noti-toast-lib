@@ -7,11 +7,8 @@
     position: relative;
     cursor: pointer;
     overflow: hidden;
-    opacity: 0;
 }
-.ntl-toast.ntl-animated{
-    transition: var(--transition_type) calc( 1ms * var(--time_ms, 500)) ease-in-out;
-}
+
 .ntl-toast.ntl-can-close::after{
     content: "\00D7";
     position: absolute;
@@ -58,23 +55,31 @@
     left: 0;
 }
 
-.ntl-toast-container[data-position$="-right"] .ntl-toast.ntl-animated {
-    transform: translateX( calc( 1% * var(--translate_value , 110)));
+.ntl-toast-container[data-position$="-right"] .ntl-toast.ntl-slide {
+    transform: translateX( 110% );
 }
-.ntl-toast-container[data-position$="-left"] .ntl-toast.ntl-animated {
-    transform: translateX( calc( -1% * var(--translate_value , 110)));
+.ntl-toast-container[data-position$="-left"] .ntl-toast.ntl-slide {
+    transform: translateX( -110% );
 }
-.ntl-toast-container[data-position="top-center"] .ntl-toast.ntl-animated {
-    transform: translateY( calc( -1vh * var(--translate_value , 110)));
+.ntl-toast-container[data-position="top-center"] .ntl-toast.ntl-slide {
+    transform: translateY( -110vh );
 }
-.ntl-toast-container[data-position="bottom-center"] .ntl-toast.ntl-animated {
-    transform: translateY( calc( 1vh * var(--translate_value , 110)));
+.ntl-toast-container[data-position="bottom-center"] .ntl-toast.ntl-slide {
+    transform: translateY( 110vh );
 }
-
-.ntl-toast-container .ntl-toast.ntl-animated.ntl-slide {
+.ntl-toast-container > .ntl-toast.ntl-slide{
+    transition: transform calc( 1ms * var(--time_ms, 500)) ease-in-out;
+}
+.ntl-toast-container > .ntl-toast.ntl-slide.ntl-show {
     opacity: 1;
     transform: translate(0, 0);
 }
-.ntl-toast-container .ntl-toast.ntl-animated.ntl-fade {
+
+.ntl-toast-container > .ntl-toast.ntl-fade{
+    opacity: 0;
+    transition: opacity calc( 1ms * var(--time_ms, 500)) ease-in-out;
+ }
+.ntl-toast-container > .ntl-toast.ntl-fade.ntl-show {
     opacity: 1;
 }
+

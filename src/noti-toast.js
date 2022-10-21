@@ -1,4 +1,4 @@
-import funcParser from "../lib/parseFunction.js";
+import funcParser from "./parseFunction/parseFunction.js";
 
 const DEFAULT_OPTIONS = {
 	debug: false,
@@ -6,19 +6,19 @@ const DEFAULT_OPTIONS = {
 	html: undefined,
 	position: 'top-right',
 	style: {
-		'background-color': 'darkseagreen',
-		'border': '2px solid #333',
+		'background-color': 'white',
+		'border': '2px solid #bbb',
 	},
-	canClose: true,
-	autoClose: 5000,
-	onClose: ()=>{},
-	showProgressBar: true,
-	pauseOnHover: true,
-	pauseOnFocusLoss: true,
 	animation: {
-		type: 'slide',
-		duration_ms: 1000,
+		type: 'none',
+		duration_ms: 200,
 	},
+	canClose: false,
+	autoClose: false,
+	onClose: ()=>{},
+	showProgressBar: false,
+	pauseOnHover: false,
+	pauseOnFocusLoss: false,
 };
 
 export default class NotiToast {
@@ -31,44 +31,55 @@ export default class NotiToast {
 	#autoClose_duration;
 	#autoClose_elapsedTime;
 	#autoClose_animationFrame;
+	#autoCloseCountDown;
 
 	#progressBarLength = 1;
+	#progressBarUpdate;
 	#progressBar_animationFrame;
 
-	#removeBinded;
-
+	#show;
 	#animated;
 	#animationClass;
 	#animation_animationFrame;
 	#dynamic_remove_event;
+	#animationRemove;
 
 	#isNotPaused = true;
 	#isReturningFromPause = false;
 
 	#debug;
 	/*endregion*/
+
 	constructor(options) {
 		this.update({'debug': options['debug']})
 		this.create();
 		this.init();
 		this.update( {...DEFAULT_OPTIONS, ...options} );
+		if(this.#debug) {
+			console.log({options});
+			console.log('TOAST:', this.#toastElem);
+		}
 	}
 
 	/*region SETTERS*/
 	set text(value){
+		if(this.#debug) console.log('SET: text');
 		if(undefined !== value && null !== value && value.length > 0)
 			this.#toastElem.textContent = value;
 	}
 	set html(value){
+		if(this.#debug) console.log('SET: html');
 		if(undefined !== value && null !== value && value.length > 0)
 			this.#toastElem.innerHTML = value;
 	}
 	set style(value){
+		if(this.#debug) console.log('SET: style');
 		Object.entries( value ).forEach(([property, value]) => {
 			this.#toastElem.style.setProperty(`--${property}`, value);
 		});
 	}
 	set position(value){
+		if(this.#debug) console.log('SET: position');
 		//select the current Toast container and position it, OR create it and position it.
 		const current_toast_container = this.#toastElem.parentElement,
 			selector = `.ntl-toast-container[data-position="${value}"]`,
@@ -79,12 +90,14 @@ export default class NotiToast {
 		current_toast_container.remove();
 	}
 	set onClose(value){
+		if(this.#debug) console.log('SET: onClose');
 		if(typeof value === 'string')
 			value = funcParser(value);
 		if(typeof value === 'function')
 			this.#onClose = value;
 	}
 	set canClose(value){
+		if(this.#debug) console.log('SET: canClose');
 		this.#toastElem.classList.toggle('ntl-can-close', value);
 		if(value) {
 			this.triggerCloseAnimationOn('click')
@@ -94,12 +107,14 @@ export default class NotiToast {
 		}
 	}
 	set autoClose(value){
+		if(this.#debug) console.log('SET: autoClose');
+		value = parseInt(value);
 		this.#autoClose_elapsedTime = 0;
 		this.#autoClose_duration = value;
-		if(false === value) return;
+		if(isNaN(value) || value === false) return;
 
 		let lastExecutionTime = null;
-		const autoClose_countDown = (currentAnimationFrameTime)=>{
+		this.#autoCloseCountDown = (currentAnimationFrameTime)=>{
 			if(this.#isReturningFromPause){
 				lastExecutionTime = null;
 				this.#isReturningFromPause = false;
@@ -107,7 +122,7 @@ export default class NotiToast {
 			if(null === lastExecutionTime){
 				lastExecutionTime = currentAnimationFrameTime;
 				this.#autoClose_animationFrame =
-					requestAnimationFrame(autoClose_countDown);
+					requestAnimationFrame(this.#autoCloseCountDown);
 				return;
 			}
 			if(this.#isNotPaused){
@@ -118,53 +133,63 @@ export default class NotiToast {
 					return;
 				}
 			}
-
 			lastExecutionTime = currentAnimationFrameTime;
-			this.#autoClose_animationFrame = requestAnimationFrame(autoClose_countDown);
+			this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
 		};
-		this.#autoClose_animationFrame = requestAnimationFrame(autoClose_countDown);
+		//this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
 	}
-	set animation(value){
-		this.#toastElem.classList.toggle('ntl-animated', value);
-		if(value && value.type){
-			this.setCSSanimationVariables(value);
+	set animation(animation){
+		if(this.#debug) console.log('SET: animation');
+		this.#animated = (animation.type === 'slide' || animation.type === 'fade');
+		if(this.#debug) console.log('isAnimated:', this.#animated);
+		if(this.#animated){
+			this.setCSSAnimationVariables(animation);
+			this.#animationClass = `ntl-${animation.type}`;
+			this.#toastElem.classList.toggle(this.#animationClass, this.#animated);
+			if(this.#debug) console.log('added:', this.#animationClass);
 
-			const setAnimation = animation_class =>{
-				this.#animated = true;
-				this.#animationClass = animation_class;
+			this.#show = () =>{
+				if(this.#debug) console.log('running: Show()');
 				this.#animation_animationFrame = requestAnimationFrame(() => {
-					this.#toastElem.classList.add(animation_class);
-				});
-				this.#toastElem.addEventListener('transitionend', ()=>{
-					if(!this.#toastElem.classList.contains(animation_class)) {
-						this.remove();
-						//this.#removeBinded
+					this.#toastElem.classList.add('ntl-show');
+					if(this.#debug) {
+						console.log('added:', 'ntl-show');
+						console.log('classList:', this.#toastElem.classList);
 					}
 				});
+				this.#toastElem.addEventListener('transitionend', (e)=>{
+					if(this.#debug) {
+						console.log('EVENT:', e);
+						console.log('transitionEnd');
+					}
+					if(!this.#toastElem.classList.contains('ntl-show'))
+						this.remove();
+				});
+				this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
+				this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
 			};
-			const removeAnimation = ()=>{
+
+			this.#animationRemove = ()=>{
+				if(this.#debug) console.log('running: removeAnimation()')
 				this.#animated = false;
 				this.#animationClass = null;
 				cancelAnimationFrame(this.#animation_animationFrame);
 				this.#toastElem.classList.remove('ntl-animated');
 				this.#toastElem.removeEventListener('transitionend', ()=>{
-					if(!this.#toastElem.classList.contains(type)) {
-						this.remove();
+					if(!this.#toastElem.classList.contains('ntl-show')) {
+						this.remove()
 					}
 				});
 			}
-
-			switch (value.type){
-				case 'slide': setAnimation('ntl-slide'); break;
-				case 'fade' : setAnimation('ntl-fade' ); break;
+			/*switch (animation.type){
+				case 'slide': setAnimation('ntl-show'); break;
+				case 'fade' : setAnimation('ntl-show' ); break;
 				default: removeAnimation(); break;
-			}
-		}
-		else {
-			this.#animated = false;
+			}*/
 		}
 	}
 	set pauseOnHover(value){
+		if(this.#debug) console.log('SET: pauseOnHover');
 		if(value){
 			this.#toastElem.addEventListener('mouseover', ()=>{
 				this.#isNotPaused = false;
@@ -183,18 +208,24 @@ export default class NotiToast {
 		}
 	}
 	set showProgressBar(value){
-		this.#toastElem.classList.toggle('ntl-progress-bar', value);
-		if(value && !isNaN(this.#autoClose_duration)){
-			const progressBar_update = ()=>{
-				if(this.#isNotPaused){
-					this.#toastElem.style.setProperty( '--progress_bar_length', this.#progressBarLength );
+		if(this.#debug) console.log('SET: showProgressBar');
+		if(typeof value === 'string')
+			value = (value === 'true');
+		if(typeof value === 'boolean') {
+			this.#toastElem.classList.toggle('ntl-progress-bar', value);
+			if (value && !isNaN(this.#autoClose_duration)) {
+				this.#progressBarUpdate = () => {
+					if (this.#isNotPaused) {
+						this.#toastElem.style.setProperty('--progress_bar_length', this.#progressBarLength);
+					}
+					this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
 				}
-				this.#progressBar_animationFrame = requestAnimationFrame(progressBar_update);
+				//this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
 			}
-			this.#progressBar_animationFrame = requestAnimationFrame(progressBar_update);
 		}
 	}
 	set pauseOnFocusLoss(value) {
+		if(this.#debug) console.log('SET: pauseOnFocusLoss');
 		if (value) {
 			document.addEventListener("visibilitychange", this.#checkVisibilityState)
 		} else {
@@ -202,6 +233,7 @@ export default class NotiToast {
 		}
 	}
 	set debug(value){
+		if(this.#debug) console.log('SET: debug');
 		if(typeof value === 'string')
 			value = (value === 'true');
 		if(typeof value === 'boolean')
@@ -212,8 +244,6 @@ export default class NotiToast {
 	/*region METHODS*/
 	init(){
 		if(this.#debug) console.group('INIT()');
-		this.#removeBinded = this.remove.bind(this);
-
 		this.#checkVisibilityState = ()=>{
 			this.#isReturningFromPause = document.visibilityState === "visible";
 		};
@@ -226,17 +256,17 @@ export default class NotiToast {
 		if(this.#debug) console.groupEnd();
 	}
 	update(options){
+		if(this.#debug) console.group('UPDATE()');
 		let can_close = false, auto_close = false;
 		Object.entries( options ).forEach(([key, value]) => {
 			this[key] = value;
 			if(key === 'canClose') can_close = value;
 			if(key === 'autoClose') auto_close = value;
 		});
-		if(this.#debug) console.group('UPDATE()');
 		if(!can_close && !auto_close && undefined !== this['canClose']) {
 			this['canClose'] = true;
 			ntlConsoleWarning({
-				message: 'autoClose and canClose were both set to false. To prevent undesire behaviour canClose has been set to TRUE.',
+				message: 'autoClose and canClose were both set to false. To prevent un desire behaviour canClose has been set to TRUE.',
 			});
 		}
 		if(this.#debug) console.groupEnd();
@@ -244,39 +274,54 @@ export default class NotiToast {
 	triggerCloseAnimationOn(event){
 		this.#dynamic_remove_event = new Event(event);
 		this.#toastElem.addEventListener(event, ()=>{
+			console.log('isAnimated:', this.#animated);
 			if(this.#animated) {
-				this.#toastElem.classList.remove(this.#animationClass);
+				this.#toastElem.classList.remove('ntl-show');
+				if(this.#debug){
+					console.log('removed:', 'ntl-show');
+					console.log('classList:', this.#toastElem.classList);
+				}
 			}else{
+				console.log('isAnimated:', this.#animated);
 				this.remove();
 			}
 		}, false);
 	}
-	setCSSanimationVariables(data){
-		if(data.type === 'slide') {
+	setCSSAnimationVariables(animation){
+		if(undefined !== animation.duration_ms)
+			this.#toastElem.style.setProperty('--time_ms', animation.duration_ms);
+		/*if(animation.type === 'slide') {
+			this.#toastElem.style.setProperty('--translate_value', 110);
 			this.#toastElem.style.setProperty('--transition_type', 'transform');
-			if(undefined !== data.duration_ms)
-				this.#toastElem.style.setProperty('--time_ms', data.duration_ms);
 		}
-		if(data.type === 'fade'){
-			this.#toastElem.style.setProperty('--translate_value', '0');
+		if(animation.type === 'fade'){
+			this.#toastElem.style.setProperty('--translate_value', 0);
 			this.#toastElem.style.setProperty('--transition_type', 'opacity');
-			if(undefined !== data.duration_ms)
-				this.#toastElem.style.setProperty('--time_ms', data.duration_ms);
-		}
+		}*/
 	}
 	remove(){
 		if(this.#debug) console.group('REMOVE()');
+
 		const toast_container = this.#toastElem.parentElement;
-		cancelAnimationFrame(this.#animation_animationFrame);
 		cancelAnimationFrame(this.#progressBar_animationFrame);
 		cancelAnimationFrame(this.#autoClose_animationFrame);
-
+		cancelAnimationFrame(this.#animation_animationFrame);
 		this.#toastElem.remove();
-		this.#onClose();
+		console.log('toast-removed');
 
 		if(this.#debug) console.groupEnd();
 		if(toast_container.hasChildNodes()) return;
 		toast_container.remove();
+		console.log('container-removed');
+		this.#onClose();
+	}
+	show(){
+
+		switch (this.#animationClass){
+		 case 'ntl-slide': this.#show('ntl-show'); break;
+		 case 'ntl-fade' : this.#show('ntl-show' ); break;
+		 default: this.#animationRemove(); break;
+		 }
 	}
 	/*endregion*/
 }
