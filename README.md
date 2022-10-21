@@ -1,5 +1,5 @@
 # Noti-Toast
-Noti Toast is a light-weight library to present toast messages and push notifications.
+Noti Toast is a light-weight library to present toast messages and push notifications. It is **still under development**, but feel free to explore.
 
 ## Installation
 You can currently fork the library, clone it, or download it.
