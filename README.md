@@ -42,8 +42,8 @@ let button1 = document.querySelector('button#btn-1'),
 button1.addEventListener('click', ()=>{
     // create a new Noti-Toast object
     notiToast = new NotiToast(notiToast_config);
-	// show it
-	notiToast.show();
+    // show it
+    notiToast.show();
 });
 
 // button #2 modifies the current config-fie, updates the Noti-Toast and fires it
@@ -54,7 +54,7 @@ button2.addEventListener('click', ()=>{
     notiToast_config.autoClose = 5000;
     // update the Noti-Toast object already created
     notiToast.update(notiToast_config);
-	// show the new one
+    // show the new one
     notiToast.show();
     // NOTE: the HTML property takes presedence over the TEXT property
 });
