@@ -7,11 +7,8 @@ const DEFAULT_OPTIONS = {
 	position: 'top-right',
 	style: {
 		'background-color': 'white',
-		'border': '2px solid #bbb',
-	},
-	animation: {
-		type: 'none',
-		duration_ms: 200,
+		'border': '1px solid hsla(60, 2%, 74%, 1)',
+		'color': 'hsla(0, 0%,0%, 1)',
 	},
 	canClose: false,
 	autoClose: false,
@@ -19,41 +16,51 @@ const DEFAULT_OPTIONS = {
 	showProgressBar: false,
 	pauseOnHover: false,
 	pauseOnFocusLoss: false,
+	animation: {
+		type: 'none',
+		duration_ms: 200,
+	},
+	type: 'default',
 };
 
 export default class NotiToast {
 	/*region PRIVATE VARS*/
 	#toastElem;
 
+	#type;
+
 	#checkVisibilityState = ()=>{};
 
+	#onOpen = ()=>{};
 	#onClose = ()=>{};
 	#autoClose_duration;
 	#autoClose_elapsedTime;
 	#autoClose_animationFrame;
+	#autoCloseIsActive;
 	#autoCloseCountDown;
 
 	#progressBarLength = 1;
 	#progressBarUpdate;
+	#progressBarIsActive;
 	#progressBar_animationFrame;
 
-	#show;
-	#animated;
+	#runAnimation;
+	#hasAnimation;
 	#animationClass;
 	#animation_animationFrame;
 	#dynamic_remove_event;
 	#animationRemove;
 
 	#isNotPaused = true;
-	#isReturningFromPause = false;
+	#recoverFocus;
 
 	#debug;
 	/*endregion*/
 
 	constructor(options) {
 		this.update({'debug': options['debug']})
-		this.create();
-		this.init();
+		this.#create();
+		this.#init();
 		this.update( {...DEFAULT_OPTIONS, ...options} );
 		if(this.#debug) {
 			console.log({options});
@@ -65,45 +72,120 @@ export default class NotiToast {
 	set text(value){
 		if(this.#debug) console.log('SET: text');
 		if(undefined !== value && null !== value && value.length > 0)
-			this.#toastElem.textContent = value;
+			this.#toastElem.innerHTML = `<span class="ntl-toast-message">${value}</span>`;
 	}
 	set html(value){
 		if(this.#debug) console.log('SET: html');
 		if(undefined !== value && null !== value && value.length > 0)
-			this.#toastElem.innerHTML = value;
+			this.#toastElem.innerHTML = `<span class="ntl-toast-message">${value}</span>`;
+	}
+	set type(value){
+		this.#type = value.toLowerCase();
+
+		if(this.#type !== 'custom') { // general config for ALL predetermine types
+			this.#toastElem.style.setProperty('--ntl-color', 'hsla(250, 50%,90%, 1)');
+			this.#toastElem.style.setProperty('--ntl-after-color', 'hsla(250, 50%,90%, 1)');
+			this.#toastElem.style.setProperty('--ntl-progress-bar-length', 0);
+			this.#toastElem.style.setProperty('--ntl-progress-bar-height', 3);
+			this.#toastElem.style.setProperty('--ntl-border', '1px solid hsla(250, 50%,90%, 1)');
+		}
+
+		if(this.#type === 'info') {
+			this.#toastElem.style.setProperty('--ntl-background-color', 'hsla(200, 70%, 55%, 1)');
+			this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', 'hsla(200, 70%, 85%, 1)');
+			this.#toastElem.innerHTML =
+				`<div class="ntl-grid ntl-toast-content"><span>
+					<svg class="ntl-svg-icon" aria-hidden="true" title="">
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/images/svg/symbols.svg#info"/>
+					</svg>
+				</span>${this.#toastElem.innerHTML}</div>`;
+		}
+		else if(this.#type === 'success') {
+			this.#toastElem.style.setProperty('--ntl-background-color', 'hsla(122, 50%,43%, 1)');
+			this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', 'hsla(122, 50%, 85%, 1)');
+			this.#toastElem.innerHTML =
+				`<div class="ntl-grid ntl-toast-content"><span>
+					<svg class="ntl-svg-icon" aria-hidden="true" title="">
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/images/svg/symbols.svg#success"/>
+					</svg>
+				</span>${this.#toastElem.innerHTML}</div>`;
+		}
+		else if(this.#type === 'warning') {
+			this.#toastElem.style.setProperty('--ntl-background-color', 'hsla(48, 89%, 60%, 1)');
+			this.#toastElem.style.setProperty('--ntl-color', 'hsla(48, 89%,20%, 1)');
+			this.#toastElem.style.setProperty('--ntl-after-color', 'hsla(48, 89%,20%, 1)');
+			this.#toastElem.style.setProperty('--ntl-border', '1px solid hsla(48, 89%,20%, 1)');
+			this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', 'hsla(48, 89%, 85%, 1)');
+			this.#toastElem.innerHTML =
+				`<div class="ntl-grid ntl-toast-content"><span>
+					<svg class="ntl-svg-icon" aria-hidden="true" title="">
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/images/svg/symbols.svg#warning"/>
+					</svg>
+				</span>${this.#toastElem.innerHTML}</div>`;
+		}
+		else if(this.#type === 'error') {
+			this.#toastElem.style.setProperty('--ntl-background-color', 'hsla(3, 79%, 41%, 1)');
+			this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', 'hsla(3, 79%, 78%, 1)');
+			this.#toastElem.innerHTML =
+				`<div class="ntl-grid ntl-toast-content"><span>
+					<svg class="ntl-svg-icon" aria-hidden="true" title="">
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/images/svg/symbols.svg#error"/>
+					</svg>
+				</span>${this.#toastElem.innerHTML}</div>`;
+		}
+		if(this.#type === 'default') {
+			this.#toastElem.style.setProperty('--ntl-background-color', 'hsla(255, 100%, 100%, 1)');
+			this.#toastElem.style.setProperty('--ntl-color', 'hsla(0, 0%,0%, 1)');
+			this.#toastElem.style.setProperty('--ntl-after-color', 'hsla(0, 0%,0%, 1)');
+			this.#toastElem.style.setProperty('--ntl-border', '1px solid hsla(60, 2%, 74%, 1)');
+			this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', 'hsla(60, 2%, 34%, 1)');
+		}
+
 	}
 	set style(value){
 		if(this.#debug) console.log('SET: style');
 		Object.entries( value ).forEach(([property, value]) => {
-			this.#toastElem.style.setProperty(`--${property}`, value);
+			this.#toastElem.style.setProperty(`--ntl-${property}`, value);
 		});
 	}
 	set position(value){
 		if(this.#debug) console.log('SET: position');
+		value = value.toLowerCase();
 		//select the current Toast container and position it, OR create it and position it.
 		const current_toast_container = this.#toastElem.parentElement,
 			selector = `.ntl-toast-container[data-position="${value}"]`,
 			toast_container = document.querySelector(selector) ?? createContainer(value);
 
-		toast_container.append(this.#toastElem);
+		if(value.includes('bottom'))
+			toast_container.prepend(this.#toastElem);
+		else
+			toast_container.append(this.#toastElem);
+
 		if(null === current_toast_container || current_toast_container.hasChildNodes()) return;
 		current_toast_container.remove();
+	}
+	set onOpen(value){
+		if(this.#debug) console.log('SET: onOpen');
+		if(typeof value === 'string')
+			value = funcParser(value);
+		if(typeof value === 'function')
+			this.#onOpen = ()=>{ value(this.#toastElem); };
 	}
 	set onClose(value){
 		if(this.#debug) console.log('SET: onClose');
 		if(typeof value === 'string')
 			value = funcParser(value);
 		if(typeof value === 'function')
-			this.#onClose = value;
+			this.#onClose = ()=>{ value(this.#toastElem); };
 	}
 	set canClose(value){
 		if(this.#debug) console.log('SET: canClose');
 		this.#toastElem.classList.toggle('ntl-can-close', value);
 		if(value) {
-			this.triggerCloseAnimationOn('click')
+			this.#triggerCloseAnimationOn('click')
 		}
 		else {
-			this.triggerCloseAnimationOn('timeout');
+			this.#triggerCloseAnimationOn('timeout');
 		}
 	}
 	set autoClose(value){
@@ -111,22 +193,18 @@ export default class NotiToast {
 		value = parseInt(value);
 		this.#autoClose_elapsedTime = 0;
 		this.#autoClose_duration = value;
-		if(isNaN(value) || value === false) return;
+		this.#autoCloseIsActive = (!isNaN(value));
+		if(!this.#autoCloseIsActive) return;
 
 		let lastExecutionTime = null;
 		this.#autoCloseCountDown = (currentAnimationFrameTime)=>{
-			if(this.#isReturningFromPause){
+			if(this.#recoverFocus) {
 				lastExecutionTime = null;
-				this.#isReturningFromPause = false;
+				this.#recoverFocus = false;
 			}
-			if(null === lastExecutionTime){
-				lastExecutionTime = currentAnimationFrameTime;
-				this.#autoClose_animationFrame =
-					requestAnimationFrame(this.#autoCloseCountDown);
-				return;
-			}
-			if(this.#isNotPaused){
-				this.#autoClose_elapsedTime += currentAnimationFrameTime - lastExecutionTime;
+
+			if(this.#isNotPaused && null !== lastExecutionTime){
+				this.#autoClose_elapsedTime += (currentAnimationFrameTime - lastExecutionTime);
 				this.#progressBarLength = 1 - ( this.#autoClose_elapsedTime / this.#autoClose_duration );
 				if(this.#autoClose_elapsedTime >= this.#autoClose_duration){
 					this.#toastElem.dispatchEvent(this.#dynamic_remove_event);
@@ -136,19 +214,19 @@ export default class NotiToast {
 			lastExecutionTime = currentAnimationFrameTime;
 			this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
 		};
-		//this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
 	}
 	set animation(animation){
 		if(this.#debug) console.log('SET: animation');
-		this.#animated = (animation.type === 'slide' || animation.type === 'fade');
-		if(this.#debug) console.log('isAnimated:', this.#animated);
-		if(this.#animated){
-			this.setCSSAnimationVariables(animation);
+		animation.type = animation.type.toLowerCase();
+		this.#hasAnimation = (animation.type === 'slide' || animation.type === 'fade');
+		if(this.#debug) console.log('hasAnimation:', this.#hasAnimation);
+		if(this.#hasAnimation){
+			this.#setCSSAnimationVariables(animation);
 			this.#animationClass = `ntl-${animation.type}`;
-			this.#toastElem.classList.toggle(this.#animationClass, this.#animated);
+			this.#toastElem.classList.toggle(this.#animationClass, this.#hasAnimation);
 			if(this.#debug) console.log('added:', this.#animationClass);
 
-			this.#show = () =>{
+			this.#runAnimation = () =>{
 				if(this.#debug) console.log('running: Show()');
 				this.#animation_animationFrame = requestAnimationFrame(() => {
 					this.#toastElem.classList.add('ntl-show');
@@ -163,29 +241,9 @@ export default class NotiToast {
 						console.log('transitionEnd');
 					}
 					if(!this.#toastElem.classList.contains('ntl-show'))
-						this.remove();
+						this.#remove();
 				});
-				this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
-				this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
 			};
-
-			this.#animationRemove = ()=>{
-				if(this.#debug) console.log('running: removeAnimation()')
-				this.#animated = false;
-				this.#animationClass = null;
-				cancelAnimationFrame(this.#animation_animationFrame);
-				this.#toastElem.classList.remove('ntl-animated');
-				this.#toastElem.removeEventListener('transitionend', ()=>{
-					if(!this.#toastElem.classList.contains('ntl-show')) {
-						this.remove()
-					}
-				});
-			}
-			/*switch (animation.type){
-				case 'slide': setAnimation('ntl-show'); break;
-				case 'fade' : setAnimation('ntl-show' ); break;
-				default: removeAnimation(); break;
-			}*/
 		}
 	}
 	set pauseOnHover(value){
@@ -210,17 +268,18 @@ export default class NotiToast {
 	set showProgressBar(value){
 		if(this.#debug) console.log('SET: showProgressBar');
 		if(typeof value === 'string')
-			value = (value === 'true');
+			value = (value.toLowerCase() === 'true');
+		console.log({value});
 		if(typeof value === 'boolean') {
 			this.#toastElem.classList.toggle('ntl-progress-bar', value);
+			this.#progressBarIsActive = value;
 			if (value && !isNaN(this.#autoClose_duration)) {
 				this.#progressBarUpdate = () => {
 					if (this.#isNotPaused) {
-						this.#toastElem.style.setProperty('--progress_bar_length', this.#progressBarLength);
+						this.#toastElem.style.setProperty('--ntl-progress-bar-length', this.#progressBarLength);
 					}
 					this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
 				}
-				//this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
 			}
 		}
 	}
@@ -235,25 +294,71 @@ export default class NotiToast {
 	set debug(value){
 		if(this.#debug) console.log('SET: debug');
 		if(typeof value === 'string')
-			value = (value === 'true');
+			value = (value.toLowerCase() === 'true');
 		if(typeof value === 'boolean')
 			this.#debug = value;
 	}
 	/*endregion*/
 
 	/*region METHODS*/
-	init(){
+	#init(){
 		if(this.#debug) console.group('INIT()');
 		this.#checkVisibilityState = ()=>{
-			this.#isReturningFromPause = document.visibilityState === "visible";
+			this.#recoverFocus = document.visibilityState === "visible";
 		};
 		if(this.#debug) console.groupEnd();
 	}
-	create(){
+	#create(){
 		if(this.#debug) console.group('CREATE()');
 		this.#toastElem = document.createElement('div');
 		this.#toastElem.classList.add('ntl-toast');
 		if(this.#debug) console.groupEnd();
+	}
+	#triggerCloseAnimationOn(event){
+		this.#dynamic_remove_event = new Event(event);
+		this.#toastElem.addEventListener(event, ()=>{
+			if(this.#debug) console.log('hasAnimation:', this.#hasAnimation);
+			if(this.#hasAnimation) {
+				this.#toastElem.classList.remove('ntl-show');
+				if(this.#debug){
+					console.log('removed:', 'ntl-show');
+					console.log('classList:', this.#toastElem.classList);
+				}
+			}else{
+				if(this.#debug) console.log('hasAnimation:', this.#hasAnimation);
+				this.#remove();
+			}
+		}, false);
+	}
+	#setCSSAnimationVariables(animation){
+		console.log({animation});
+		if(undefined !== animation.duration_ms)
+			this.#toastElem.style.setProperty('--ntl-duration-ms', animation.duration_ms);
+		console.log('duration:', animation.duration_ms);
+		/*if(animation.type === 'slide') {
+		 this.#toastElem.style.setProperty('--translate_value', 110);
+		 this.#toastElem.style.setProperty('--transition_type', 'transform');
+		 }
+		 if(animation.type === 'fade'){
+		 this.#toastElem.style.setProperty('--translate_value', 0);
+		 this.#toastElem.style.setProperty('--transition_type', 'opacity');
+		 }*/
+	}
+	#remove(){
+		if(this.#debug) console.group('REMOVE()');
+		this.#onClose();
+
+		const toast_container = this.#toastElem.parentElement;
+		cancelAnimationFrame(this.#progressBar_animationFrame);
+		cancelAnimationFrame(this.#autoClose_animationFrame);
+		cancelAnimationFrame(this.#animation_animationFrame);
+		this.#toastElem.remove();
+		if(this.#debug) console.log('toast-removed');
+
+		if(this.#debug) console.groupEnd();
+		if(toast_container.hasChildNodes()) return;
+		toast_container.remove();
+		if(this.#debug) console.log('container-removed');
 	}
 	update(options){
 		if(this.#debug) console.group('UPDATE()');
@@ -271,58 +376,35 @@ export default class NotiToast {
 		}
 		if(this.#debug) console.groupEnd();
 	}
-	triggerCloseAnimationOn(event){
-		this.#dynamic_remove_event = new Event(event);
-		this.#toastElem.addEventListener(event, ()=>{
-			console.log('isAnimated:', this.#animated);
-			if(this.#animated) {
-				this.#toastElem.classList.remove('ntl-show');
-				if(this.#debug){
-					console.log('removed:', 'ntl-show');
-					console.log('classList:', this.#toastElem.classList);
-				}
-			}else{
-				console.log('isAnimated:', this.#animated);
-				this.remove();
-			}
-		}, false);
-	}
-	setCSSAnimationVariables(animation){
-		if(undefined !== animation.duration_ms)
-			this.#toastElem.style.setProperty('--time_ms', animation.duration_ms);
-		/*if(animation.type === 'slide') {
-			this.#toastElem.style.setProperty('--translate_value', 110);
-			this.#toastElem.style.setProperty('--transition_type', 'transform');
+	open(){
+		if(this.#debug){
+			console.log('HasAnimation:', this.#hasAnimation);
+			console.log('ProgressBar:', this.#progressBarIsActive);
+			console.log('AutoClose:', this.#autoCloseIsActive);
 		}
-		if(animation.type === 'fade'){
-			this.#toastElem.style.setProperty('--translate_value', 0);
-			this.#toastElem.style.setProperty('--transition_type', 'opacity');
-		}*/
+		setTimeout(()=>{
+			this.#onOpen();
+			if(this.#hasAnimation)
+				this.#runAnimation();
+			else
+				this.#toastElem.classList.add('ntl-show');
+			if(this.#autoCloseIsActive) {
+				this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
+				if(this.#progressBarIsActive)
+					this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
+			}
+		}, 50);
+		//this setTimeout() hack is needed to make the animations work with Firefox
+		//slide-in and fade-in animations didn't animate the toast, it just appeared in both cases,
+		//but the slide-out and fade-out animations executed without a problem.
 	}
-	remove(){
-		if(this.#debug) console.group('REMOVE()');
-
-		const toast_container = this.#toastElem.parentElement;
-		cancelAnimationFrame(this.#progressBar_animationFrame);
-		cancelAnimationFrame(this.#autoClose_animationFrame);
-		cancelAnimationFrame(this.#animation_animationFrame);
-		this.#toastElem.remove();
-		console.log('toast-removed');
-
-		if(this.#debug) console.groupEnd();
-		if(toast_container.hasChildNodes()) return;
-		toast_container.remove();
-		console.log('container-removed');
-		this.#onClose();
+	close(){
+		this.#toastElem.dispatchEvent(this.#dynamic_remove_event);
 	}
-	show(){
+	/*endregion*/
 
-		switch (this.#animationClass){
-		 case 'ntl-slide': this.#show('ntl-show'); break;
-		 case 'ntl-fade' : this.#show('ntl-show' ); break;
-		 default: this.#animationRemove(); break;
-		 }
-	}
+	/*region TRIGGER METHODS*/
+
 	/*endregion*/
 }
 

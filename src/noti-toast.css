@@ -1,8 +1,23 @@
+:root {
+    --ntl-background-color: hsla(255, 100%, 100%, 1);
+    --ntl-color: hsla(0, 0%,0%, 1);
+    --ntl-after-color: hsla(0, 0%,0%, 1);
+
+    --ntl-border: 1px solid hsla(60, 2%, 74%, 1);
+
+    --ntl-progress-bar-length: 0;
+    --ntl-progress-bar-height: 3;
+    --ntl-progress-bar-background-color: hsla(60, 2%, 34%, 1);
+
+    --ntl-duration-ms: 500;
+}
+
 .ntl-toast{
     box-sizing: border-box;
     padding: .75rem;
-    background-color: var(--background-color, white);
-    border: var(--border, 1px solid #333);
+    background-color: var(--ntl-background-color);
+    color: var(--ntl-color);
+    border: var(--ntl-border);
     border-radius: .25em;
     position: relative;
     cursor: pointer;
@@ -14,13 +29,15 @@
     position: absolute;
     top: 2px;
     right: 5px;
+    color: var(--ntl-after-color);
+    font-size: 1.35rem;
 }
 .ntl-toast.ntl-progress-bar::before{
     content: "";
     position: absolute;
-    height: 2px;
-    width: calc( 100% * var(--progress_bar_length, 0) );
-    background-color: #0e6647;
+    height: calc( 1px * var(--ntl-progress-bar-height) );
+    width: calc( 100% * var(--ntl-progress-bar-length) );
+    background-color: var(--ntl-progress-bar-background-color);
     bottom: 0;
     left: 0;
     right: 0;
@@ -68,18 +85,36 @@
     transform: translateY( 110vh );
 }
 .ntl-toast-container > .ntl-toast.ntl-slide{
-    transition: transform calc( 1ms * var(--time_ms, 500)) ease-in-out;
+    transition: transform calc( 1ms * var(--ntl-duration-ms)) ease-in-out;
 }
 .ntl-toast-container > .ntl-toast.ntl-slide.ntl-show {
-    opacity: 1;
     transform: translate(0, 0);
 }
 
 .ntl-toast-container > .ntl-toast.ntl-fade{
     opacity: 0;
-    transition: opacity calc( 1ms * var(--time_ms, 500)) ease-in-out;
+    transition: opacity calc( 1ms * var(--ntl-duration-ms)) ease-in-out;
  }
 .ntl-toast-container > .ntl-toast.ntl-fade.ntl-show {
     opacity: 1;
 }
 
+.ntl-svg-icon {
+    width: 2rem;
+    height: 2rem;
+    line-height: 1;
+    overflow: hidden;
+    fill: var(--ntl-color);
+    display: inline-block;
+}
+.ntl-toast-message {
+    display: inline-block;
+}
+
+.ntl-grid {
+    display: grid;
+}
+.ntl-toast-content {
+    grid-template-columns: 1fr 5fr;
+    align-items: center;
+}
