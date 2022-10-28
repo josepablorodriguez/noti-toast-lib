@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="src/noti-toast.css">
+  <link rel="stylesheet" href="lib/jsonToHTMLParser.css">
+  <script type="module" defer src="script.js"></script>
+  <title>noti-toast-lib DEMO</title>
+</head>
+<body>
+<h1>noti-toast-lib Test demo</h1>
+<main>
+  <section>
+    <h2>Fire Toast</h2>
+    <button>Apply</button>
+  </section> <!--button-->
+  <section>
+    <h2>Configuration settings</h2>
+    <div class="configuration-settings">
+      <div class="node">
+        <label for="debug">
+          <input type="checkbox" id="debug" class="index"/>
+          Debug:
+        </label>
+        <input type="text" class="value" value="true"/>
+      </div> <!--debug-->
+      <div class="node">
+        <label for="position">
+          <input type="checkbox" id="position" class="index" checked="checked"/>
+          Position:
+        </label>
+        <input type="text" class="value" value="top-right"/>
+      </div> <!--position-->
+      <div class="node">
+        <label for="text">
+          <input type="checkbox" id="text" class="index" checked="checked"/>
+          Text:
+        </label>
+        <input type="text" class="value"/>
+      </div> <!--text-->
+      <div class="node">
+        <label for="html">
+          <input type="checkbox" id="html" class="index" checked="checked"/>
+          HTML:
+        </label>
+        <textarea class="value"><div><u>Title</u></div><div>Content Here!</div></textarea>
+      </div> <!--html-->
+      <div class="node">
+        <label for="autoClose">
+          <input type="checkbox" id="autoClose" class="index" checked="checked"/>
+          Auto Close:
+        </label>
+        <input type="text" class="value" value="5000"/>
+      </div> <!--autoClose-->
+      <div class="node">
+        <label for="canClose">
+          <input type="checkbox" id="canClose" class="index" checked="checked"/>
+          Can Close:
+        </label>
+        <input type="text" class="value" value="true"/>
+      </div> <!--canClose-->
+      <div class="node">
+        <label for="onClose">
+          <input type="checkbox" id="onClose" class="index" checked="checked"/>
+          On Close:
+        </label>
+        <textarea class="value">function hi(){ console.log("hola"); console.log("adios"); }</textarea>
+      </div> <!--onClose-->
+      <div class="node">
+        <label for="style">
+          <input type="checkbox" id="style" class="index" checked="checked"/>
+          Style:
+        </label>
+        <div type="text" class="value sub-node">
+          <div class="node">
+            <label for="background-color">
+              <input type="checkbox" id="background-color" class="index" checked="checked"/>
+              Background Color:
+            </label>
+            <input type="text" class="value" value="red"/>
+          </div> <!--background-color-->
+          <div class="node">
+            <label for="border">
+              <input type="checkbox" id="border" class="index" checked="checked"/>
+              Border:
+            </label>
+            <input type="text" class="value" value="3px solid #333"/>
+          </div> <!--border-->
+        </div>
+      </div> <!--style-->
+    </div>
+  </section> <!--Configuration Settings-->
+  <section>
+    <h2>Configuration File</h2>
+    <div class="configuration-json">
+      <pre><code id="code"></code></pre>
+    </div>
+  </section> <!--Configuration File-->
+</main>
+</body>
+</html>

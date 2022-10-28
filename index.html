@@ -1,105 +1,169 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="src/noti-toast.css">
-  <link rel="stylesheet" href="lib/jsonToHTMLParser.css">
-  <script type="module" defer src="script.js"></script>
-  <title>noti-toast-lib DEMO</title>
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo Noti-Toast-Lib</title>
 </head>
 <body>
 <h1>noti-toast-lib Test demo</h1>
 <main>
+  <link rel="stylesheet" href="assets/styles/style.css">
+  <link rel="stylesheet" href="assets/styles/noti-toast.css">
+  <link rel="stylesheet" href="assets/styles/jsonToHtmlParser/jsonToHTMLParser.css">
+  <script type="module" defer="" src="assets/scripts/script.js"></script>
   <section>
-    <h2>Fire Toast</h2>
-    <button>Apply</button>
-  </section> <!--button-->
-  <section>
-    <h2>Configuration settings</h2>
-    <div class="configuration-settings">
-      <div class="node">
-        <label for="debug">
-          <input type="checkbox" id="debug" class="index"/>
-          Debug:
-        </label>
-        <input type="text" class="value" value="true"/>
-      </div> <!--debug-->
-      <div class="node">
-        <label for="position">
-          <input type="checkbox" id="position" class="index" checked="checked"/>
-          Position:
-        </label>
-        <input type="text" class="value" value="top-right"/>
-      </div> <!--position-->
-      <div class="node">
-        <label for="text">
-          <input type="checkbox" id="text" class="index" checked="checked"/>
-          Text:
-        </label>
-        <input type="text" class="value"/>
-      </div> <!--text-->
-      <div class="node">
-        <label for="html">
-          <input type="checkbox" id="html" class="index" checked="checked"/>
-          HTML:
-        </label>
-        <textarea class="value"><div><u>Title</u></div><div>Content Here!</div></textarea>
-      </div> <!--html-->
-      <div class="node">
-        <label for="autoClose">
-          <input type="checkbox" id="autoClose" class="index" checked="checked"/>
-          Auto Close:
-        </label>
-        <input type="text" class="value" value="5000"/>
-      </div> <!--autoClose-->
-      <div class="node">
-        <label for="canClose">
-          <input type="checkbox" id="canClose" class="index" checked="checked"/>
-          Can Close:
-        </label>
-        <input type="text" class="value" value="true"/>
-      </div> <!--canClose-->
-      <div class="node">
-        <label for="onClose">
-          <input type="checkbox" id="onClose" class="index" checked="checked"/>
-          On Close:
-        </label>
-        <textarea class="value">function hi(){ console.log("hola"); console.log("adios"); }</textarea>
-      </div> <!--onClose-->
-      <div class="node">
-        <label for="style">
-          <input type="checkbox" id="style" class="index" checked="checked"/>
-          Style:
-        </label>
-        <div type="text" class="value sub-node">
-          <div class="node">
-            <label for="background-color">
-              <input type="checkbox" id="background-color" class="index" checked="checked"/>
-              Background Color:
-            </label>
-            <input type="text" class="value" value="red"/>
-          </div> <!--background-color-->
-          <div class="node">
-            <label for="border">
-              <input type="checkbox" id="border" class="index" checked="checked"/>
-              Border:
-            </label>
-            <input type="text" class="value" value="3px solid #333"/>
-          </div> <!--border-->
+    <div class="ntl-grid ntl-grid-container">
+      <div class="ntl-grid-item">
+        <h2>Configuration Settings</h2>
+        <div class="ntl-grid ntl-grid-config-template">
+          <div class="ntl-node ntl-grid-block1">
+            <input type="checkbox" id="text" class="ntl-property" checked="checked">
+            <label for="text">Text:</label>
+            <label for="3"></label>
+            <input type="text" class="ntl-value" id="3" value="Hello, world! (¿how is it? I am OK.)ñ=">
+          </div>                 <div class="ntl-node ntl-grid-block2">
+          <input type="checkbox" id="position" class="ntl-property" checked="checked">
+          <label for="position">Position:</label>
+          <label for="2"></label>
+          <select class="ntl-value" id="2">
+            <option value="top-right">Top-Right</option>
+            <option value="top-center">Top-center</option>
+            <option value="top-left">Top-Left</option>
+            <option value="middle-left">Middle-Left</option>
+            <option value="middle-right">Middle-Right</option>
+            <option value="bottom-right">Bottom-Right</option>
+            <option value="bottom-center">Bottom-Center</option>
+            <option value="bottom-left">Bottom-Left</option>
+          </select>
+        </div>                 <div class="ntl-node ntl-grid-block3">
+          <input type="checkbox" id="html" class="ntl-property" checked="checked">
+          <label for="html">HTML:</label>
+          <label for="4"></label>
+          <textarea class="ntl-value" id="4">&lt;div&gt;&lt;u&gt;Title&lt;/u&gt;&lt;/div&gt;&lt;div&gt;Content Here!&lt;/div&gt;</textarea>
+        </div>                 <div class="ntl-node ntl-grid-block14">
+          <input type="checkbox" id="onOpen" class="ntl-property" checked="checked">
+          <label for="onOpen">On Open:</label>
+          <label for="17"></label>
+          <textarea class="ntl-value" id="17">function opening(toast){ let num1 = 100; let num2 = 2.5; console.log("hi! I'am opening", (num1*num2)); console.log(toast.classList); }</textarea>
+        </div>                 <div class="ntl-node ntl-grid-block4">
+          <input type="checkbox" id="onClose" class="ntl-property" checked="checked">
+          <label for="onClose">On Close:</label>
+          <label for="7"></label>
+          <textarea class="ntl-value" id="7">function closing(toast){ console.log("bye! I'am closing"); console.log(toast.classList); }</textarea>
+        </div>                 <div class="ntl-node ntl-grid-block5">
+          <input type="checkbox" id="autoClose" class="ntl-property" checked="checked">
+          <label for="autoClose">Auto Close:</label>
+          <label for="5"></label>
+          <input type="text" class="ntl-value" value="5000" id="5">
+        </div>                 <div class="ntl-node ntl-grid-block6">
+          <input type="checkbox" id="canClose" class="ntl-property" checked="checked">
+          <label for="canClose">Can Close:</label>
+          <label for="6"></label>
+          <select class="ntl-value" id="6">
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
+        </div>                 <div class="ntl-node ntl-grid-block7">
+          <input type="checkbox" id="style" class="ntl-property" checked="checked">
+          <label for="style">Style:</label>
+          <div type="text" class="ntl-value ntl-sub-node">
+            <div class="ntl-node">
+              <input type="checkbox" id="background-color" class="ntl-property" checked="checked">
+              <label for="background-color">Background Color:</label>
+              <label for="8"></label>
+              <input type="text" class="ntl-value" value="darkseagreen" id="8">
+            </div>                         <div class="ntl-node">
+            <input type="checkbox" id="color" class="ntl-property" checked="checked">
+            <label for="color">Color:</label>
+            <label for="16"></label>
+            <input type="text" class="ntl-value" value="black" id="16">
+          </div>                         <div class="ntl-node">
+            <input type="checkbox" id="border" class="ntl-property" checked="checked">
+            <label for="border">Border:</label>
+            <label for="9"></label>
+            <input type="text" class="ntl-value" value="3px solid #bbb" id="9">
+          </div>                     </div>
+        </div>                 <div class="ntl-node ntl-grid-block8">
+          <input type="checkbox" id="animation" class="ntl-property" checked="checked">
+          <label for="animation">Animation:</label>
+          <div type="text" class="ntl-value ntl-sub-node">
+            <div class="ntl-node">
+              <input type="checkbox" id="type" class="ntl-property" checked="checked">
+              <label for="type">Type:</label>
+              <label for="13"></label>
+              <select class="ntl-value" id="13">
+                <option value="none">None</option>
+                <option value="slide">Slide</option>
+                <option value="fade">Fade</option>
+              </select>
+            </div>                         <div class="ntl-node">
+            <input type="checkbox" id="duration_ms" class="ntl-property" checked="checked">
+            <label for="duration_ms">Duration (ms):</label>
+            <label for="14"></label>
+            <input type="text" class="ntl-value" value="1000" id="14">
+          </div>                     </div>
+        </div>                 <div class="ntl-node ntl-grid-block9">
+          <input type="checkbox" id="pauseOnHover" class="ntl-property">
+          <label for="pauseOnHover">Pause On Hover:</label>
+          <label for="11"></label>
+          <select class="ntl-value" id="11">
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
+        </div>                 <div class="ntl-node ntl-grid-block10">
+          <input type="checkbox" id="pauseOnFocusLoss" class="ntl-property">
+          <label for="pauseOnFocusLoss">Pause On Focus Loss:</label>
+          <label for="12"></label>
+          <select class="ntl-value" id="12">
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
+        </div>                 <div class="ntl-node ntl-grid-block11">
+          <input type="checkbox" id="showProgressBar" class="ntl-property">
+          <label for="showProgressBar">Show Progress Bar:</label>
+          <label for="10"></label>
+          <select class="ntl-value" id="10">
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
+        </div>                 <div class="ntl-node ntl-grid-block12">
+          <input type="checkbox" id="debug" class="ntl-property">
+          <label for="debug">Debug:</label>
+          <label for="1"></label>
+          <select class="ntl-value" id="1">
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
+        </div>                 <div class="ntl-node ntl-grid-block13">
+          <input type="checkbox" id="type" class="ntl-property">
+          <label for="type">Type:</label>
+          <label for="15"></label>
+          <select class="ntl-value" id="15">
+            <option value="default">Default</option>
+            <option value="info">Info</option>
+            <option value="success">Success</option>
+            <option value="warning">Warning</option>
+            <option value="error">Error</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>                 <div class="ntl-node ntl-grid-block15">
+          <input type="checkbox" id="theme" class="ntl-property">
+          <label for="theme">Theme:</label>
+          <label for="18"></label>
+          <select class="ntl-value" id="18">
+            <option value="light">Light</option>
+            <option value="solid">Solid</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>             </div>
+      </div>         <div class="ntl-grid-item ntl-parse-button">Show Noti-Toast</div>
+      <div class="ntl-grid-item">
+        <h2>Configuration File</h2>
+        <div class="ntl-conf-json">
+          <pre><code id="code"></code></pre>
         </div>
-      </div> <!--style-->
-    </div>
-  </section> <!--Configuration Settings-->
-  <section>
-    <h2>Configuration File</h2>
-    <div class="configuration-json">
-      <pre><code id="code"></code></pre>
-    </div>
-  </section> <!--Configuration File-->
-</main>
-</body>
-</html>
+      </div>     </div>
+  </section> </main>
+
+</body></html>

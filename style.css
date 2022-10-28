@@ -32,7 +32,7 @@
     'block14 block14'
     'block4 block4'
     'block5 block6'
-    'block13 block13'
+    'block13 block15'
     'block7 block8'
     'block9 block10'
     'block11 block12';
@@ -92,6 +92,10 @@
 }
 .ntl-grid-block14 {
     grid-area: block14;
+    background-color: var(--ntl-conf-background);
+}
+.ntl-grid-block15 {
+    grid-area: block15;
     background-color: var(--ntl-conf-background);
 }
 

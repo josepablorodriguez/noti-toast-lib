@@ -5,6 +5,8 @@ const DEFAULT_OPTIONS = {
 	text: undefined,
 	html: undefined,
 	position: 'top-right',
+	theme: 'light',
+	type: 'default',
 	style: {
 		'background-color': 'white',
 		'border': '1px solid hsla(60, 2%, 74%, 1)',
@@ -20,13 +22,13 @@ const DEFAULT_OPTIONS = {
 		type: 'none',
 		duration_ms: 200,
 	},
-	type: 'default',
 };
 
 export default class NotiToast {
 	/*region PRIVATE VARS*/
 	#toastElem;
 
+	#theme;
 	#type;
 
 	#checkVisibilityState = ()=>{};
@@ -79,20 +81,38 @@ export default class NotiToast {
 		if(undefined !== value && null !== value && value.length > 0)
 			this.#toastElem.innerHTML = `<span class="ntl-toast-message">${value}</span>`;
 	}
+	set theme(value){
+		if(this.#debug) console.log('SET: theme');
+		this.#theme = value.toLowerCase();
+	}
 	set type(value){
+		if(this.#debug) console.log('SET: type');
 		this.#type = value.toLowerCase();
 
+		let type = {};
 		if(this.#type !== 'custom') { // general config for ALL predetermine types
-			this.#toastElem.style.setProperty('--ntl-color', 'hsla(250, 50%,90%, 1)');
-			this.#toastElem.style.setProperty('--ntl-after-color', 'hsla(250, 50%,90%, 1)');
-			this.#toastElem.style.setProperty('--ntl-progress-bar-length', 0);
-			this.#toastElem.style.setProperty('--ntl-progress-bar-height', 3);
-			this.#toastElem.style.setProperty('--ntl-border', '1px solid hsla(250, 50%,90%, 1)');
+			type.color = type.iconColor = type.afterColor = 'hsla(250, 50%, 90%, 1)';
+			type.progBarLength = 0;
+			type.progBarHeight = 3;
+			type.border = '1px solid hsla(250, 50%,90%, 1)';
 		}
 
 		if(this.#type === 'info') {
-			this.#toastElem.style.setProperty('--ntl-background-color', 'hsla(200, 70%, 55%, 1)');
-			this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', 'hsla(200, 70%, 85%, 1)');
+			if(this.#theme === 'light') {
+				//type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(200, 70%, 35%, 1)';
+				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(200, 70%, 55%, 1)';
+				type.bgColor = 'hsla(200, 70%, 85%, 1)';
+				type.border = '1px solid hsla(200, 70%, 30%, 1)';
+			}
+			else if(this.#theme === 'solid') {
+				type.bgColor = 'hsla(200, 70%, 55%, 1)';
+				type.progBarBgColor = 'hsla(200, 70%, 85%, 1)';
+			}
+			else if(this.#theme === 'dark') {
+				type.iconColor = type.progBarBgColor = 'hsla(200, 70%, 55%, 1)';
+				type.bgColor = 'hsla(200, 70%, 7%, 1)';
+				type.border = '1px solid hsla(200, 70%, 20%, 1)';
+			}
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
@@ -101,8 +121,20 @@ export default class NotiToast {
 				</span>${this.#toastElem.innerHTML}</div>`;
 		}
 		else if(this.#type === 'success') {
-			this.#toastElem.style.setProperty('--ntl-background-color', 'hsla(122, 50%,43%, 1)');
-			this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', 'hsla(122, 50%, 85%, 1)');
+			if(this.#theme === 'light'){
+				type.bgColor = 'hsla(122, 50%, 85%, 1)';
+				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(122, 50%, 43%, 1)';
+				type.border = '1px solid hsla(122, 50%, 38%, 1)';
+			}
+			else if(this.#theme === 'solid'){
+				type.bgColor = 'hsla(122, 50%, 43%, 1)';
+				type.progBarBgColor = 'hsla(122, 50%, 85%, 1)';
+			}
+			else if(this.#theme === 'dark'){
+				type.iconColor = type.progBarBgColor = 'hsla(122, 50%, 43%, 1)';
+				type.bgColor = 'hsla(122, 50%, 6%, 1)';
+				type.border = '1px solid hsla(122, 50%, 20%, 1)';
+			}
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
@@ -111,11 +143,22 @@ export default class NotiToast {
 				</span>${this.#toastElem.innerHTML}</div>`;
 		}
 		else if(this.#type === 'warning') {
-			this.#toastElem.style.setProperty('--ntl-background-color', 'hsla(48, 89%, 60%, 1)');
-			this.#toastElem.style.setProperty('--ntl-color', 'hsla(48, 89%,20%, 1)');
-			this.#toastElem.style.setProperty('--ntl-after-color', 'hsla(48, 89%,20%, 1)');
-			this.#toastElem.style.setProperty('--ntl-border', '1px solid hsla(48, 89%,20%, 1)');
-			this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', 'hsla(48, 89%, 85%, 1)');
+			if(this.#theme === 'light'){
+				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(48, 89%, 60%, 1)';
+				type.bgColor = 'hsla(48, 89%, 95%, 1)';
+				type.border = '1px solid hsla(48, 89%, 55%, 1)';
+			}
+			else if(this.#theme === 'solid'){
+				type.bgColor = 'hsla(48, 89%, 60%, 1)';
+				type.color = type.iconColor = type.afterColor = 'hsla(48, 89%, 25%, 1)';
+				type.progBarBgColor = 'hsla(48, 89%, 85%, 1)';
+				type.border = '1px solid hsla(48, 89%,20%, 1)';
+			}
+			else if(this.#theme === 'dark'){
+				type.iconColor = type.progBarBgColor = 'hsla(48, 89%, 60%, 1)';
+				type.bgColor = 'hsla(48, 89%, 6%, 1)';
+				type.border = '1px solid hsla(48, 89%, 20%, 1)';
+			}
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
@@ -124,23 +167,54 @@ export default class NotiToast {
 				</span>${this.#toastElem.innerHTML}</div>`;
 		}
 		else if(this.#type === 'error') {
-			this.#toastElem.style.setProperty('--ntl-background-color', 'hsla(3, 79%, 41%, 1)');
-			this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', 'hsla(3, 79%, 78%, 1)');
+			if(this.#theme === 'light'){
+				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(3, 79%, 41%, 1)';
+				type.bgColor = 'hsla(3, 79%, 85%, 1)';
+				type.border = '1px solid hsla(3, 79%, 35%, 1)';
+			}
+			else if(this.#theme === 'solid'){
+				type.bgColor = 'hsla(3, 79%, 41%, 1)';
+				type.progBarBgColor = 'hsla(3, 79%, 78%, 1)';
+			}
+			else if(this.#theme === 'dark'){
+				type.iconColor = type.progBarBgColor = 'hsla(3, 79%, 41%, 1)';
+				type.bgColor = 'hsla(3, 79%, 7%, 1)';
+				type.border = '1px solid hsla(3, 79%, 20%, 1)';
+			}
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/images/svg/symbols.svg#error"/>
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/images/svg/symbols.svg#clear"/>
 					</svg>
 				</span>${this.#toastElem.innerHTML}</div>`;
 		}
-		if(this.#type === 'default') {
-			this.#toastElem.style.setProperty('--ntl-background-color', 'hsla(255, 100%, 100%, 1)');
-			this.#toastElem.style.setProperty('--ntl-color', 'hsla(0, 0%,0%, 1)');
-			this.#toastElem.style.setProperty('--ntl-after-color', 'hsla(0, 0%,0%, 1)');
-			this.#toastElem.style.setProperty('--ntl-border', '1px solid hsla(60, 2%, 74%, 1)');
-			this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', 'hsla(60, 2%, 34%, 1)');
+		if(this.#type === 'default-') {
+			if(this.#theme === 'light'){
+				type.color = type.afterColor = 'hsla(0, 0%,0%, 1)';
+				type.bgColor = 'hsla(255, 100%, 100%, 1)';
+				type.progBarBgColor = 'hsla(60, 2%, 34%, 1)';
+				type.border = '1px solid hsla(60, 2%, 74%, 1)';
+			}
+			else if(this.#theme === 'solid'){
+				type.color = type.afterColor = type.progBarBgColor = 'hsla(0, 0%,0%, 1)';
+				type.bgColor = 'hsla(60, 2%, 34%, 1)';
+				type.border = '1px solid hsla(0, 0%, 0%, 1)';
+			}
+			else if(this.#theme === 'dark'){
+				type.color = type.afterColor = type.progBarBgColor = 'hsla(255, 100%, 100%, 1)';
+				type.bgColor = 'hsla(0, 0%, 0%, 1)';
+				type.border = '1px solid hsla(60, 2%, 74%, 1)';
+			}
 		}
 
+		this.#toastElem.style.setProperty('--ntl-background-color', type.bgColor);
+		this.#toastElem.style.setProperty('--ntl-color', type.color);
+		this.#toastElem.style.setProperty('--ntl-icon-color', type.iconColor);
+		this.#toastElem.style.setProperty('--ntl-after-color', type.afterColor);
+		this.#toastElem.style.setProperty('--ntl-border', type.border);
+		this.#toastElem.style.setProperty('--ntl-progress-bar-length', type.progBarLength);
+		this.#toastElem.style.setProperty('--ntl-progress-bar-height', type.progBarHeight);
+		this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', type.progBarBgColor);
 	}
 	set style(value){
 		if(this.#debug) console.log('SET: style');
@@ -269,7 +343,6 @@ export default class NotiToast {
 		if(this.#debug) console.log('SET: showProgressBar');
 		if(typeof value === 'string')
 			value = (value.toLowerCase() === 'true');
-		console.log({value});
 		if(typeof value === 'boolean') {
 			this.#toastElem.classList.toggle('ntl-progress-bar', value);
 			this.#progressBarIsActive = value;
@@ -334,7 +407,7 @@ export default class NotiToast {
 		console.log({animation});
 		if(undefined !== animation.duration_ms)
 			this.#toastElem.style.setProperty('--ntl-duration-ms', animation.duration_ms);
-		console.log('duration:', animation.duration_ms);
+
 		/*if(animation.type === 'slide') {
 		 this.#toastElem.style.setProperty('--translate_value', 110);
 		 this.#toastElem.style.setProperty('--transition_type', 'transform');

@@ -1,7 +1,8 @@
 :root {
     --ntl-background-color: hsla(255, 100%, 100%, 1);
-    --ntl-color: hsla(0, 0%,0%, 1);
+    --ntl-color: hsla(0, 0%, 0%, 1);
     --ntl-after-color: hsla(0, 0%,0%, 1);
+    --ntl-icon-color: hsla(0, 0%, 0%, 1);
 
     --ntl-border: 1px solid hsla(60, 2%, 74%, 1);
 
@@ -104,7 +105,7 @@
     height: 2rem;
     line-height: 1;
     overflow: hidden;
-    fill: var(--ntl-color);
+    fill: var(--ntl-icon-color);
     display: inline-block;
 }
 .ntl-toast-message {
