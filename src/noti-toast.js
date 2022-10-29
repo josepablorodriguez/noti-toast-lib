@@ -116,7 +116,7 @@ export default class NotiToast {
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/images/svg/symbols.svg#info"/>
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="./lib/svg/symbols.svg#info"/>
 					</svg>
 				</span>${this.#toastElem.innerHTML}</div>`;
 		}
@@ -138,7 +138,7 @@ export default class NotiToast {
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/images/svg/symbols.svg#success"/>
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href=".lib/svg/symbols.svg#success"/>
 					</svg>
 				</span>${this.#toastElem.innerHTML}</div>`;
 		}
@@ -162,7 +162,7 @@ export default class NotiToast {
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/images/svg/symbols.svg#warning"/>
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href=".lib/svg/symbols.svg#warning"/>
 					</svg>
 				</span>${this.#toastElem.innerHTML}</div>`;
 		}
@@ -184,7 +184,7 @@ export default class NotiToast {
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/images/svg/symbols.svg#clear"/>
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href=".lib/svg/symbols.svg#clear"/>
 					</svg>
 				</span>${this.#toastElem.innerHTML}</div>`;
 		}
