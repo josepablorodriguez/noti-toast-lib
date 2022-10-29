@@ -1,4 +1,4 @@
-import funcParser from "./parseFunction/parseFunction.js";
+import funcParser from "lib/parseFunction.js";
 
 const DEFAULT_OPTIONS = {
 	debug: false,
