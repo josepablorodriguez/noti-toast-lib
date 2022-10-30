@@ -61,7 +61,7 @@ button2.addEventListener('click', ()=>{
 ```
 
 ## Demo
-[Go to Demo [under construction]](https://google.com)
+[Go to Demo [under construction]](https://josepablorodriguez.github.io/noti-toast-lib/)
 
 ## Roadmap
 These are some of the future features you can expect from the Noti-Toast library:
