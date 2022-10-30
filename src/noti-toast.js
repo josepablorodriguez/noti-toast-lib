@@ -188,7 +188,7 @@ export default class NotiToast {
 					</svg>
 				</span>${this.#toastElem.innerHTML}</div>`;
 		}
-		if(this.#type === 'default-') {
+		if(this.#type === 'default') {
 			if(this.#theme === 'light'){
 				type.color = type.afterColor = 'hsla(0, 0%,0%, 1)';
 				type.bgColor = 'hsla(255, 100%, 100%, 1)';
@@ -218,9 +218,10 @@ export default class NotiToast {
 	}
 	set style(value){
 		if(this.#debug) console.log('SET: style');
-		Object.entries( value ).forEach(([property, value]) => {
-			this.#toastElem.style.setProperty(`--ntl-${property}`, value);
-		});
+		if(this.#type === 'custom')
+			Object.entries( value ).forEach(([property, value]) => {
+				this.#toastElem.style.setProperty(`--ntl-${property}`, value);
+			});
 	}
 	set position(value){
 		if(this.#debug) console.log('SET: position');
