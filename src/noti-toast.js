@@ -13,19 +13,19 @@ const DEFAULT_OPTIONS = {
 		'color': 'hsla(0, 0%,0%, 1)',
 	},
 	canClose: false,
-	autoClose: false,
+	autoClose: 20,
 	onClose: ()=>{},
 	showProgressBar: false,
 	pauseOnHover: false,
 	pauseOnFocusLoss: false,
 	animation: {
 		type: 'none',
-		duration_ms: 200,
+		duration_ms: 10,
 	},
 };
 
 export default class NotiToast {
-	/*region PRIVATE VARS*/
+	/*region PRIVATE VARS */
 	#toastElem;
 
 	#theme;
@@ -60,7 +60,7 @@ export default class NotiToast {
 	/*endregion*/
 
 	constructor(options) {
-		this.update({'debug': options['debug']})
+		this.update({ debug: options.debug });
 		this.#create();
 		this.#init();
 		this.update( {...DEFAULT_OPTIONS, ...options} );
@@ -70,7 +70,7 @@ export default class NotiToast {
 		}
 	}
 
-	/*region SETTERS*/
+	/*region SETTERS */
 	set text(value){
 		if(this.#debug) console.log('SET: text');
 		if(undefined !== value && null !== value && value.length > 0)
@@ -218,10 +218,10 @@ export default class NotiToast {
 	}
 	set style(value){
 		if(this.#debug) console.log('SET: style');
-		if(this.#type === 'custom')
-			Object.entries( value ).forEach(([property, value]) => {
-				this.#toastElem.style.setProperty(`--ntl-${property}`, value);
-			});
+		/*if(this.#type === 'custom')*/
+		Object.entries( value ).forEach(([property, value]) => {
+			this.#toastElem.style.setProperty(`--ntl-${property}`, value);
+		});
 	}
 	set position(value){
 		if(this.#debug) console.log('SET: position');
@@ -374,7 +374,7 @@ export default class NotiToast {
 	}
 	/*endregion*/
 
-	/*region METHODS*/
+	/*region METHODS */
 	#init(){
 		if(this.#debug) console.group('INIT()');
 		this.#checkVisibilityState = ()=>{
@@ -405,7 +405,6 @@ export default class NotiToast {
 		}, false);
 	}
 	#setCSSAnimationVariables(animation){
-		console.log({animation});
 		if(undefined !== animation.duration_ms)
 			this.#toastElem.style.setProperty('--ntl-duration-ms', animation.duration_ms);
 
@@ -477,7 +476,7 @@ export default class NotiToast {
 	}
 	/*endregion*/
 
-	/*region TRIGGER METHODS*/
+	/*region TRIGGER METHODS */
 
 	/*endregion*/
 }

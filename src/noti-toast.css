@@ -11,6 +11,8 @@
     --ntl-progress-bar-background-color: hsla(60, 2%, 34%, 1);
 
     --ntl-duration-ms: 500;
+
+    --ntl-top: 1rem;
 }
 
 .ntl-toast{
@@ -23,6 +25,7 @@
     position: relative;
     cursor: pointer;
     overflow: hidden;
+    top: var(--ntl-top);
 }
 
 .ntl-toast.ntl-can-close::after{
@@ -95,7 +98,7 @@
 .ntl-toast-container > .ntl-toast.ntl-fade{
     opacity: 0;
     transition: opacity calc( 1ms * var(--ntl-duration-ms)) ease-in-out;
- }
+}
 .ntl-toast-container > .ntl-toast.ntl-fade.ntl-show {
     opacity: 1;
 }
