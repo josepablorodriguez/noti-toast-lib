@@ -43,7 +43,7 @@ button1.addEventListener('click', ()=>{
     // create a new Noti-Toast object
     notiToast = new NotiToast(notiToast_config);
     // show it
-    notiToast.show();
+    notiToast.open();
 });
 
 // button #2 modifies the current config-fie, updates the Noti-Toast and fires it
@@ -55,7 +55,7 @@ button2.addEventListener('click', ()=>{
     // update the Noti-Toast object already created
     notiToast.update(notiToast_config);
     // show the new one
-    notiToast.show();
+    notiToast.open();
     // NOTE: the HTML property takes presedence over the TEXT property
 });
 ```
