@@ -1,5 +1,14 @@
 import funcParser from "../lib/parseFunction.js";
 
+const VALID_POSITIONS = [
+	'top-left', 'top-center', 'top-right',
+	'middle-left', 'middle-center', 'middle-right',
+	'bottom-left', 'bottom-center', 'bottom-right'
+];
+const VALID_THEMES = ['light', 'solid', 'dark'];
+const VALID_TYPES = ['default', 'info', 'success', 'warning', 'error', 'custom'];
+const VALID_ANIMATIONS = ['none', 'slide', 'fade'];
+
 const DEFAULT_OPTIONS = {
 	debug: false,
 	text: undefined,
@@ -55,6 +64,8 @@ export default class NotiToast {
 
 	#isNotPaused = true;
 	#recoverFocus;
+	#handleMouseOver = () => { this.#isNotPaused = false; };
+	#handleMouseLeave = () => { this.#isNotPaused = true; };
 
 	#debug;
 	/*endregion*/
@@ -73,21 +84,41 @@ export default class NotiToast {
 	/*region SETTERS */
 	set text(value){
 		if(this.#debug) console.log('SET: text');
-		if(undefined !== value && null !== value && value.length > 0)
-			this.#toastElem.innerHTML = `<span class="ntl-toast-message">${value}</span>`;
+		if(undefined !== value && null !== value && value.length > 0) {
+			const span = document.createElement('span');
+			span.className = 'ntl-toast-message';
+			span.textContent = value;
+			this.#toastElem.innerHTML = '';
+			this.#toastElem.appendChild(span);
+		}
 	}
 	set html(value){
 		if(this.#debug) console.log('SET: html');
+		// WARNING: Uses innerHTML - caller is responsible for sanitizing input to prevent XSS
 		if(undefined !== value && null !== value && value.length > 0)
 			this.#toastElem.innerHTML = `<span class="ntl-toast-message">${value}</span>`;
 	}
 	set theme(value){
 		if(this.#debug) console.log('SET: theme');
-		this.#theme = value.toLowerCase();
+		value = value.toLowerCase();
+		if(!VALID_THEMES.includes(value)) {
+			ntlConsoleWarning({
+				message: `Invalid theme "${value}". Valid themes: ${VALID_THEMES.join(', ')}. Defaulting to "light".`
+			});
+			value = 'light';
+		}
+		this.#theme = value;
 	}
 	set type(value){
 		if(this.#debug) console.log('SET: type');
-		this.#type = value.toLowerCase();
+		value = value.toLowerCase();
+		if(!VALID_TYPES.includes(value)) {
+			ntlConsoleWarning({
+				message: `Invalid type "${value}". Valid types: ${VALID_TYPES.join(', ')}. Defaulting to "default".`
+			});
+			value = 'default';
+		}
+		this.#type = value;
 
 		let type = {};
 		if(this.#type !== 'custom') { // general config for ALL predetermine types
@@ -226,6 +257,12 @@ export default class NotiToast {
 	set position(value){
 		if(this.#debug) console.log('SET: position');
 		value = value.toLowerCase();
+		if(!VALID_POSITIONS.includes(value)) {
+			ntlConsoleWarning({
+				message: `Invalid position "${value}". Valid positions: ${VALID_POSITIONS.join(', ')}. Defaulting to "top-right".`
+			});
+			value = 'top-right';
+		}
 		//select the current Toast container and position it, OR create it and position it.
 		const current_toast_container = this.#toastElem.parentElement,
 			selector = `.ntl-toast-container[data-position="${value}"]`,
@@ -266,6 +303,12 @@ export default class NotiToast {
 	set autoClose(value){
 		if(this.#debug) console.log('SET: autoClose');
 		value = parseInt(value);
+		if(!isNaN(value) && value <= 0) {
+			ntlConsoleWarning({
+				message: `Invalid autoClose value "${value}". Must be a positive number. Disabling autoClose.`
+			});
+			value = NaN;
+		}
 		this.#autoClose_elapsedTime = 0;
 		this.#autoClose_duration = value;
 		this.#autoCloseIsActive = (!isNaN(value));
@@ -293,6 +336,18 @@ export default class NotiToast {
 	set animation(animation){
 		if(this.#debug) console.log('SET: animation');
 		animation.type = animation.type.toLowerCase();
+		if(!VALID_ANIMATIONS.includes(animation.type)) {
+			ntlConsoleWarning({
+				message: `Invalid animation type "${animation.type}". Valid types: ${VALID_ANIMATIONS.join(', ')}. Defaulting to "none".`
+			});
+			animation.type = 'none';
+		}
+		if(animation.duration_ms !== undefined && (isNaN(animation.duration_ms) || animation.duration_ms <= 0)) {
+			ntlConsoleWarning({
+				message: `Invalid animation duration "${animation.duration_ms}". Must be a positive number. Defaulting to 500ms.`
+			});
+			animation.duration_ms = 500;
+		}
 		this.#hasAnimation = (animation.type === 'slide' || animation.type === 'fade');
 		if(this.#debug) console.log('hasAnimation:', this.#hasAnimation);
 		if(this.#hasAnimation){
@@ -324,20 +379,12 @@ export default class NotiToast {
 	set pauseOnHover(value){
 		if(this.#debug) console.log('SET: pauseOnHover');
 		if(value){
-			this.#toastElem.addEventListener('mouseover', ()=>{
-				this.#isNotPaused = false;
-			});
-			this.#toastElem.addEventListener('mouseleave', ()=>{
-				this.#isNotPaused = true;
-			});
+			this.#toastElem.addEventListener('mouseover', this.#handleMouseOver);
+			this.#toastElem.addEventListener('mouseleave', this.#handleMouseLeave);
 		}
 		else{
-			this.#toastElem.removeEventListener('mouseover', ()=>{
-				this.#isNotPaused = false;
-			});
-			this.#toastElem.removeEventListener('mouseleave', ()=>{
-				this.#isNotPaused = true;
-			});
+			this.#toastElem.removeEventListener('mouseover', this.#handleMouseOver);
+			this.#toastElem.removeEventListener('mouseleave', this.#handleMouseLeave);
 		}
 	}
 	set showProgressBar(value){
