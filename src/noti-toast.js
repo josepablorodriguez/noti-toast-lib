@@ -231,6 +231,9 @@ export default class NotiToast {
 	#dynamic_remove_event;
 	#animationRemove;
 
+	#handleKeyDown;
+	#previouslyFocusedElement;
+
 	#isNotPaused = true;
 	#recoverFocus;
 	#handleMouseOver = () => { this.#isNotPaused = false; };
@@ -312,6 +315,10 @@ export default class NotiToast {
 		if(this.#debug) console.log('SET: type');
 		this.#type = validateOption(value, VALID_TYPES, 'default', 'type');
 
+		this.#toastElem.setAttribute('aria-live',
+			(this.#type === 'error' || this.#type === 'warning') ? 'assertive' : 'polite'
+		);
+
 		// Base config for all predefined types
 		let typeStyles = {
 			color: 'hsla(250, 50%, 90%, 1)',
@@ -386,9 +393,22 @@ export default class NotiToast {
 		if(this.#debug) console.log('SET: canClose');
 		this.#toastElem.classList.toggle('ntl-can-close', value);
 		if(value) {
-			this.#triggerCloseAnimationOn('click')
+			this.#toastElem.setAttribute('tabindex', '0');
+			this.#toastElem.setAttribute('aria-label', 'Notification. Press Escape to dismiss.');
+			this.#handleKeyDown = (e) => {
+				if(e.key === 'Escape') {
+					this.#toastElem.dispatchEvent(this.#dynamic_remove_event);
+				}
+			};
+			this.#toastElem.addEventListener('keydown', this.#handleKeyDown);
+			this.#triggerCloseAnimationOn('click');
 		}
 		else {
+			this.#toastElem.removeAttribute('tabindex');
+			this.#toastElem.removeAttribute('aria-label');
+			if(this.#handleKeyDown) {
+				this.#toastElem.removeEventListener('keydown', this.#handleKeyDown);
+			}
 			this.#triggerCloseAnimationOn('timeout');
 		}
 	}
@@ -525,6 +545,9 @@ export default class NotiToast {
 		if(this.#debug) console.group('CREATE()');
 		this.#toastElem = document.createElement('div');
 		this.#toastElem.classList.add('ntl-toast');
+		this.#toastElem.setAttribute('role', 'alert');
+		this.#toastElem.setAttribute('aria-live', 'polite');
+		this.#toastElem.setAttribute('aria-atomic', 'true');
 		if(this.#debug) console.groupEnd();
 	}
 	#applyCSSProperties(styleConfig){
@@ -578,7 +601,13 @@ export default class NotiToast {
 		cancelAnimationFrame(this.#progressBar_animationFrame);
 		cancelAnimationFrame(this.#autoClose_animationFrame);
 		cancelAnimationFrame(this.#animation_animationFrame);
+		if(this.#handleKeyDown) {
+			this.#toastElem.removeEventListener('keydown', this.#handleKeyDown);
+		}
 		this.#toastElem.remove();
+		if(this.#previouslyFocusedElement && this.#previouslyFocusedElement.focus) {
+			this.#previouslyFocusedElement.focus();
+		}
 		if(this.#debug) console.log('toast-removed');
 
 		if(this.#debug) console.groupEnd();
@@ -610,6 +639,7 @@ export default class NotiToast {
 	 * Displays the toast notification
 	 */
 	open(){
+		this.#previouslyFocusedElement = document.activeElement;
 		if(this.#debug){
 			console.log('HasAnimation:', this.#hasAnimation);
 			console.log('ProgressBar:', this.#progressBarIsActive);

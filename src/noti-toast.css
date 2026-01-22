@@ -127,6 +127,15 @@
     opacity: 1;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .ntl-toast-container > .ntl-toast.ntl-slide,
+    .ntl-toast-container > .ntl-toast.ntl-fade,
+    .ntl-toast-container > .ntl-toast.ntl-bounce,
+    .ntl-toast-container > .ntl-toast.ntl-zoom {
+        transition: none;
+    }
+}
+
 .ntl-svg-icon {
     width: 2rem;
     height: 2rem;
