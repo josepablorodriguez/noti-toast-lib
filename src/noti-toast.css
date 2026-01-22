@@ -103,6 +103,30 @@
     opacity: 1;
 }
 
+/* Bounce animation */
+.ntl-toast-container > .ntl-toast.ntl-bounce {
+    transform: scale(0.3);
+    opacity: 0;
+    transition: transform calc(1ms * var(--ntl-duration-ms)) cubic-bezier(0.68, -0.55, 0.265, 1.55),
+                opacity calc(1ms * var(--ntl-duration-ms)) ease-out;
+}
+.ntl-toast-container > .ntl-toast.ntl-bounce.ntl-show {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Zoom animation */
+.ntl-toast-container > .ntl-toast.ntl-zoom {
+    transform: scale(0);
+    opacity: 0;
+    transition: transform calc(1ms * var(--ntl-duration-ms)) ease-out,
+                opacity calc(1ms * var(--ntl-duration-ms)) ease-out;
+}
+.ntl-toast-container > .ntl-toast.ntl-zoom.ntl-show {
+    transform: scale(1);
+    opacity: 1;
+}
+
 .ntl-svg-icon {
     width: 2rem;
     height: 2rem;

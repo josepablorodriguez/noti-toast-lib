@@ -7,7 +7,165 @@ const VALID_POSITIONS = [
 ];
 const VALID_THEMES = ['light', 'solid', 'dark'];
 const VALID_TYPES = ['default', 'info', 'success', 'warning', 'error', 'custom'];
-const VALID_ANIMATIONS = ['none', 'slide', 'fade'];
+const VALID_ANIMATIONS = ['none', 'slide', 'fade', 'bounce', 'zoom'];
+
+// Icon mappings for notification types
+const TYPE_ICONS = {
+	info: 'info',
+	success: 'success',
+	warning: 'warning',
+	error: 'clear'
+};
+
+// Color configurations for each type and theme
+const TYPE_CONFIGS = {
+	info: {
+		light: {
+			color: 'hsla(200, 70%, 55%, 1)',
+			iconColor: 'hsla(200, 70%, 55%, 1)',
+			afterColor: 'hsla(200, 70%, 55%, 1)',
+			progBarBgColor: 'hsla(200, 70%, 55%, 1)',
+			bgColor: 'hsla(200, 70%, 85%, 1)',
+			border: '1px solid hsla(200, 70%, 30%, 1)'
+		},
+		solid: {
+			bgColor: 'hsla(200, 70%, 55%, 1)',
+			progBarBgColor: 'hsla(200, 70%, 85%, 1)'
+		},
+		dark: {
+			iconColor: 'hsla(200, 70%, 55%, 1)',
+			progBarBgColor: 'hsla(200, 70%, 55%, 1)',
+			bgColor: 'hsla(200, 70%, 7%, 1)',
+			border: '1px solid hsla(200, 70%, 20%, 1)'
+		}
+	},
+	success: {
+		light: {
+			bgColor: 'hsla(122, 50%, 85%, 1)',
+			color: 'hsla(122, 50%, 43%, 1)',
+			iconColor: 'hsla(122, 50%, 43%, 1)',
+			afterColor: 'hsla(122, 50%, 43%, 1)',
+			progBarBgColor: 'hsla(122, 50%, 43%, 1)',
+			border: '1px solid hsla(122, 50%, 38%, 1)'
+		},
+		solid: {
+			bgColor: 'hsla(122, 50%, 43%, 1)',
+			progBarBgColor: 'hsla(122, 50%, 85%, 1)'
+		},
+		dark: {
+			iconColor: 'hsla(122, 50%, 43%, 1)',
+			progBarBgColor: 'hsla(122, 50%, 43%, 1)',
+			bgColor: 'hsla(122, 50%, 6%, 1)',
+			border: '1px solid hsla(122, 50%, 20%, 1)'
+		}
+	},
+	warning: {
+		light: {
+			color: 'hsla(48, 89%, 60%, 1)',
+			iconColor: 'hsla(48, 89%, 60%, 1)',
+			afterColor: 'hsla(48, 89%, 60%, 1)',
+			progBarBgColor: 'hsla(48, 89%, 60%, 1)',
+			bgColor: 'hsla(48, 89%, 95%, 1)',
+			border: '1px solid hsla(48, 89%, 55%, 1)'
+		},
+		solid: {
+			bgColor: 'hsla(48, 89%, 60%, 1)',
+			color: 'hsla(48, 89%, 25%, 1)',
+			iconColor: 'hsla(48, 89%, 25%, 1)',
+			afterColor: 'hsla(48, 89%, 25%, 1)',
+			progBarBgColor: 'hsla(48, 89%, 85%, 1)',
+			border: '1px solid hsla(48, 89%, 20%, 1)'
+		},
+		dark: {
+			iconColor: 'hsla(48, 89%, 60%, 1)',
+			progBarBgColor: 'hsla(48, 89%, 60%, 1)',
+			bgColor: 'hsla(48, 89%, 6%, 1)',
+			border: '1px solid hsla(48, 89%, 20%, 1)'
+		}
+	},
+	error: {
+		light: {
+			color: 'hsla(3, 79%, 41%, 1)',
+			iconColor: 'hsla(3, 79%, 41%, 1)',
+			afterColor: 'hsla(3, 79%, 41%, 1)',
+			progBarBgColor: 'hsla(3, 79%, 41%, 1)',
+			bgColor: 'hsla(3, 79%, 85%, 1)',
+			border: '1px solid hsla(3, 79%, 35%, 1)'
+		},
+		solid: {
+			bgColor: 'hsla(3, 79%, 41%, 1)',
+			progBarBgColor: 'hsla(3, 79%, 78%, 1)'
+		},
+		dark: {
+			iconColor: 'hsla(3, 79%, 41%, 1)',
+			progBarBgColor: 'hsla(3, 79%, 41%, 1)',
+			bgColor: 'hsla(3, 79%, 7%, 1)',
+			border: '1px solid hsla(3, 79%, 20%, 1)'
+		}
+	},
+	default: {
+		light: {
+			color: 'hsla(0, 0%, 0%, 1)',
+			afterColor: 'hsla(0, 0%, 0%, 1)',
+			bgColor: 'hsla(255, 100%, 100%, 1)',
+			progBarBgColor: 'hsla(60, 2%, 34%, 1)',
+			border: '1px solid hsla(60, 2%, 74%, 1)'
+		},
+		solid: {
+			color: 'hsla(0, 0%, 0%, 1)',
+			afterColor: 'hsla(0, 0%, 0%, 1)',
+			progBarBgColor: 'hsla(0, 0%, 0%, 1)',
+			bgColor: 'hsla(60, 2%, 34%, 1)',
+			border: '1px solid hsla(0, 0%, 0%, 1)'
+		},
+		dark: {
+			color: 'hsla(255, 100%, 100%, 1)',
+			afterColor: 'hsla(255, 100%, 100%, 1)',
+			progBarBgColor: 'hsla(255, 100%, 100%, 1)',
+			bgColor: 'hsla(0, 0%, 0%, 1)',
+			border: '1px solid hsla(60, 2%, 74%, 1)'
+		}
+	}
+};
+
+// CSS property mapping for type styles
+const CSS_PROPERTY_MAP = {
+	bgColor: '--ntl-background-color',
+	color: '--ntl-color',
+	iconColor: '--ntl-icon-color',
+	afterColor: '--ntl-after-color',
+	border: '--ntl-border',
+	progBarLength: '--ntl-progress-bar-length',
+	progBarHeight: '--ntl-progress-bar-height',
+	progBarBgColor: '--ntl-progress-bar-background-color'
+};
+
+// Inline SVG icon paths for notification types
+const INLINE_ICONS = {
+	info: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>',
+	success: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+	warning: '<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>',
+	error: '<path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/>'
+};
+
+/**
+ * Validates an option value against a list of valid values
+ * @param {string} value - The value to validate
+ * @param {string[]} validValues - Array of valid options
+ * @param {string} defaultValue - Default value if invalid
+ * @param {string} optionName - Name of the option for warning message
+ * @returns {string} The validated value or default
+ */
+function validateOption(value, validValues, defaultValue, optionName) {
+	value = value.toLowerCase();
+	if (!validValues.includes(value)) {
+		ntlConsoleWarning({
+			message: `Invalid ${optionName} "${value}". Valid options: ${validValues.join(', ')}. Defaulting to "${defaultValue}".`
+		});
+		return defaultValue;
+	}
+	return value;
+}
 
 const DEFAULT_OPTIONS = {
 	debug: false,
@@ -33,6 +191,17 @@ const DEFAULT_OPTIONS = {
 	},
 };
 
+/**
+ * NotiToast - A lightweight toast notification library
+ * @class
+ * @example
+ * const toast = new NotiToast({
+ *   text: 'Hello World',
+ *   type: 'success',
+ *   position: 'top-right'
+ * });
+ * toast.open();
+ */
 export default class NotiToast {
 	/*region PRIVATE VARS */
 	#toastElem;
@@ -70,6 +239,27 @@ export default class NotiToast {
 	#debug;
 	/*endregion*/
 
+	/**
+	 * Creates a new toast notification
+	 * @param {Object} options - Configuration options
+	 * @param {string} [options.text] - Plain text content for the toast
+	 * @param {string} [options.html] - HTML content (overrides text, caller must sanitize)
+	 * @param {string} [options.position='top-right'] - Toast position (top/middle/bottom + left/center/right)
+	 * @param {string} [options.theme='light'] - Visual theme ('light', 'solid', 'dark')
+	 * @param {string} [options.type='default'] - Notification type ('default', 'info', 'success', 'warning', 'error', 'custom')
+	 * @param {boolean} [options.canClose=false] - Show close button
+	 * @param {number} [options.autoClose=20] - Auto-close duration in milliseconds
+	 * @param {boolean} [options.showProgressBar=false] - Show progress bar for auto-close
+	 * @param {boolean} [options.pauseOnHover=false] - Pause auto-close timer on hover
+	 * @param {boolean} [options.pauseOnFocusLoss=false] - Pause timer when window loses focus
+	 * @param {Object} [options.animation] - Animation configuration
+	 * @param {string} [options.animation.type='none'] - Animation type ('none', 'slide', 'fade', 'bounce', 'zoom')
+	 * @param {number} [options.animation.duration_ms=10] - Animation duration in milliseconds
+	 * @param {Object} [options.style] - CSS variable overrides (prefixed with --ntl-)
+	 * @param {Function} [options.onOpen] - Callback when toast opens
+	 * @param {Function} [options.onClose] - Callback when toast closes
+	 * @param {boolean} [options.debug=false] - Enable debug logging
+	 */
 	constructor(options) {
 		this.update({ debug: options.debug });
 		this.#create();
@@ -82,6 +272,10 @@ export default class NotiToast {
 	}
 
 	/*region SETTERS */
+	/**
+	 * Sets the plain text content of the toast
+	 * @param {string} value - The text to display
+	 */
 	set text(value){
 		if(this.#debug) console.log('SET: text');
 		if(undefined !== value && null !== value && value.length > 0) {
@@ -92,161 +286,61 @@ export default class NotiToast {
 			this.#toastElem.appendChild(span);
 		}
 	}
+	/**
+	 * Sets the HTML content of the toast (overrides text)
+	 * @param {string} value - The HTML string to display (caller must sanitize to prevent XSS)
+	 */
 	set html(value){
 		if(this.#debug) console.log('SET: html');
 		// WARNING: Uses innerHTML - caller is responsible for sanitizing input to prevent XSS
 		if(undefined !== value && null !== value && value.length > 0)
 			this.#toastElem.innerHTML = `<span class="ntl-toast-message">${value}</span>`;
 	}
+	/**
+	 * Sets the visual theme of the toast
+	 * @param {string} value - Theme name ('light', 'solid', 'dark')
+	 */
 	set theme(value){
 		if(this.#debug) console.log('SET: theme');
-		value = value.toLowerCase();
-		if(!VALID_THEMES.includes(value)) {
-			ntlConsoleWarning({
-				message: `Invalid theme "${value}". Valid themes: ${VALID_THEMES.join(', ')}. Defaulting to "light".`
-			});
-			value = 'light';
-		}
-		this.#theme = value;
+		this.#theme = validateOption(value, VALID_THEMES, 'light', 'theme');
 	}
+	/**
+	 * Sets the notification type and applies corresponding styles/icon
+	 * @param {string} value - Type name ('default', 'info', 'success', 'warning', 'error', 'custom')
+	 */
 	set type(value){
 		if(this.#debug) console.log('SET: type');
-		value = value.toLowerCase();
-		if(!VALID_TYPES.includes(value)) {
-			ntlConsoleWarning({
-				message: `Invalid type "${value}". Valid types: ${VALID_TYPES.join(', ')}. Defaulting to "default".`
-			});
-			value = 'default';
-		}
-		this.#type = value;
+		this.#type = validateOption(value, VALID_TYPES, 'default', 'type');
 
-		let type = {};
-		if(this.#type !== 'custom') { // general config for ALL predetermine types
-			type.color = type.iconColor = type.afterColor = 'hsla(250, 50%, 90%, 1)';
-			type.progBarLength = 0;
-			type.progBarHeight = 3;
-			type.border = '1px solid hsla(250, 50%,90%, 1)';
-		}
+		// Base config for all predefined types
+		let typeStyles = {
+			color: 'hsla(250, 50%, 90%, 1)',
+			iconColor: 'hsla(250, 50%, 90%, 1)',
+			afterColor: 'hsla(250, 50%, 90%, 1)',
+			progBarLength: 0,
+			progBarHeight: 3,
+			border: '1px solid hsla(250, 50%, 90%, 1)'
+		};
 
-		if(this.#type === 'info') {
-			if(this.#theme === 'light') {
-				//type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(200, 70%, 35%, 1)';
-				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(200, 70%, 55%, 1)';
-				type.bgColor = 'hsla(200, 70%, 85%, 1)';
-				type.border = '1px solid hsla(200, 70%, 30%, 1)';
-			}
-			else if(this.#theme === 'solid') {
-				type.bgColor = 'hsla(200, 70%, 55%, 1)';
-				type.progBarBgColor = 'hsla(200, 70%, 85%, 1)';
-			}
-			else if(this.#theme === 'dark') {
-				type.iconColor = type.progBarBgColor = 'hsla(200, 70%, 55%, 1)';
-				type.bgColor = 'hsla(200, 70%, 7%, 1)';
-				type.border = '1px solid hsla(200, 70%, 20%, 1)';
-			}
-			this.#toastElem.innerHTML =
-				`<div class="ntl-grid ntl-toast-content"><span>
-					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="./lib/svg/symbols.svg#info"/>
-					</svg>
-				</span>${this.#toastElem.innerHTML}</div>`;
-		}
-		else if(this.#type === 'success') {
-			if(this.#theme === 'light'){
-				type.bgColor = 'hsla(122, 50%, 85%, 1)';
-				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(122, 50%, 43%, 1)';
-				type.border = '1px solid hsla(122, 50%, 38%, 1)';
-			}
-			else if(this.#theme === 'solid'){
-				type.bgColor = 'hsla(122, 50%, 43%, 1)';
-				type.progBarBgColor = 'hsla(122, 50%, 85%, 1)';
-			}
-			else if(this.#theme === 'dark'){
-				type.iconColor = type.progBarBgColor = 'hsla(122, 50%, 43%, 1)';
-				type.bgColor = 'hsla(122, 50%, 6%, 1)';
-				type.border = '1px solid hsla(122, 50%, 20%, 1)';
-			}
-			this.#toastElem.innerHTML =
-				`<div class="ntl-grid ntl-toast-content"><span>
-					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="./lib/svg/symbols.svg#success"/>
-					</svg>
-				</span>${this.#toastElem.innerHTML}</div>`;
-		}
-		else if(this.#type === 'warning') {
-			if(this.#theme === 'light'){
-				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(48, 89%, 60%, 1)';
-				type.bgColor = 'hsla(48, 89%, 95%, 1)';
-				type.border = '1px solid hsla(48, 89%, 55%, 1)';
-			}
-			else if(this.#theme === 'solid'){
-				type.bgColor = 'hsla(48, 89%, 60%, 1)';
-				type.color = type.iconColor = type.afterColor = 'hsla(48, 89%, 25%, 1)';
-				type.progBarBgColor = 'hsla(48, 89%, 85%, 1)';
-				type.border = '1px solid hsla(48, 89%,20%, 1)';
-			}
-			else if(this.#theme === 'dark'){
-				type.iconColor = type.progBarBgColor = 'hsla(48, 89%, 60%, 1)';
-				type.bgColor = 'hsla(48, 89%, 6%, 1)';
-				type.border = '1px solid hsla(48, 89%, 20%, 1)';
-			}
-			this.#toastElem.innerHTML =
-				`<div class="ntl-grid ntl-toast-content"><span>
-					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="./lib/svg/symbols.svg#warning"/>
-					</svg>
-				</span>${this.#toastElem.innerHTML}</div>`;
-		}
-		else if(this.#type === 'error') {
-			if(this.#theme === 'light'){
-				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(3, 79%, 41%, 1)';
-				type.bgColor = 'hsla(3, 79%, 85%, 1)';
-				type.border = '1px solid hsla(3, 79%, 35%, 1)';
-			}
-			else if(this.#theme === 'solid'){
-				type.bgColor = 'hsla(3, 79%, 41%, 1)';
-				type.progBarBgColor = 'hsla(3, 79%, 78%, 1)';
-			}
-			else if(this.#theme === 'dark'){
-				type.iconColor = type.progBarBgColor = 'hsla(3, 79%, 41%, 1)';
-				type.bgColor = 'hsla(3, 79%, 7%, 1)';
-				type.border = '1px solid hsla(3, 79%, 20%, 1)';
-			}
-			this.#toastElem.innerHTML =
-				`<div class="ntl-grid ntl-toast-content"><span>
-					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="./lib/svg/symbols.svg#clear"/>
-					</svg>
-				</span>${this.#toastElem.innerHTML}</div>`;
-		}
-		if(this.#type === 'default') {
-			if(this.#theme === 'light'){
-				type.color = type.afterColor = 'hsla(0, 0%,0%, 1)';
-				type.bgColor = 'hsla(255, 100%, 100%, 1)';
-				type.progBarBgColor = 'hsla(60, 2%, 34%, 1)';
-				type.border = '1px solid hsla(60, 2%, 74%, 1)';
-			}
-			else if(this.#theme === 'solid'){
-				type.color = type.afterColor = type.progBarBgColor = 'hsla(0, 0%,0%, 1)';
-				type.bgColor = 'hsla(60, 2%, 34%, 1)';
-				type.border = '1px solid hsla(0, 0%, 0%, 1)';
-			}
-			else if(this.#theme === 'dark'){
-				type.color = type.afterColor = type.progBarBgColor = 'hsla(255, 100%, 100%, 1)';
-				type.bgColor = 'hsla(0, 0%, 0%, 1)';
-				type.border = '1px solid hsla(60, 2%, 74%, 1)';
-			}
+		// Apply type/theme specific config if not custom
+		if(this.#type !== 'custom' && TYPE_CONFIGS[this.#type]?.[this.#theme]) {
+			typeStyles = { ...typeStyles, ...TYPE_CONFIGS[this.#type][this.#theme] };
 		}
 
-		this.#toastElem.style.setProperty('--ntl-background-color', type.bgColor);
-		this.#toastElem.style.setProperty('--ntl-color', type.color);
-		this.#toastElem.style.setProperty('--ntl-icon-color', type.iconColor);
-		this.#toastElem.style.setProperty('--ntl-after-color', type.afterColor);
-		this.#toastElem.style.setProperty('--ntl-border', type.border);
-		this.#toastElem.style.setProperty('--ntl-progress-bar-length', type.progBarLength);
-		this.#toastElem.style.setProperty('--ntl-progress-bar-height', type.progBarHeight);
-		this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', type.progBarBgColor);
+		// Add icon for types that have one
+		const iconName = TYPE_ICONS[this.#type];
+		if(iconName) {
+			const iconHTML = this.#getIconHTML(iconName);
+			this.#toastElem.innerHTML = `<div class="ntl-grid ntl-toast-content"><span>${iconHTML}</span>${this.#toastElem.innerHTML}</div>`;
+		}
+
+		// Apply all CSS properties
+		this.#applyCSSProperties(typeStyles);
 	}
+	/**
+	 * Sets custom CSS variable overrides
+	 * @param {Object} value - Object with CSS property names (without --ntl- prefix) and values
+	 */
 	set style(value){
 		if(this.#debug) console.log('SET: style');
 		/*if(this.#type === 'custom')*/
@@ -254,15 +348,13 @@ export default class NotiToast {
 			this.#toastElem.style.setProperty(`--ntl-${property}`, value);
 		});
 	}
+	/**
+	 * Sets the position of the toast on screen
+	 * @param {string} value - Position string (e.g., 'top-right', 'bottom-center', 'middle-left')
+	 */
 	set position(value){
 		if(this.#debug) console.log('SET: position');
-		value = value.toLowerCase();
-		if(!VALID_POSITIONS.includes(value)) {
-			ntlConsoleWarning({
-				message: `Invalid position "${value}". Valid positions: ${VALID_POSITIONS.join(', ')}. Defaulting to "top-right".`
-			});
-			value = 'top-right';
-		}
+		value = validateOption(value, VALID_POSITIONS, 'top-right', 'position');
 		//select the current Toast container and position it, OR create it and position it.
 		const current_toast_container = this.#toastElem.parentElement,
 			selector = `.ntl-toast-container[data-position="${value}"]`,
@@ -333,22 +425,22 @@ export default class NotiToast {
 			this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
 		};
 	}
+	/**
+	 * Sets the animation configuration for the toast
+	 * @param {Object} animation - Animation configuration object
+	 * @param {string} [animation.type='none'] - Animation type ('none', 'slide', 'fade', 'bounce', 'zoom')
+	 * @param {number} [animation.duration_ms] - Animation duration in milliseconds
+	 */
 	set animation(animation){
 		if(this.#debug) console.log('SET: animation');
-		animation.type = animation.type.toLowerCase();
-		if(!VALID_ANIMATIONS.includes(animation.type)) {
-			ntlConsoleWarning({
-				message: `Invalid animation type "${animation.type}". Valid types: ${VALID_ANIMATIONS.join(', ')}. Defaulting to "none".`
-			});
-			animation.type = 'none';
-		}
+		animation.type = validateOption(animation.type, VALID_ANIMATIONS, 'none', 'animation type');
 		if(animation.duration_ms !== undefined && (isNaN(animation.duration_ms) || animation.duration_ms <= 0)) {
 			ntlConsoleWarning({
 				message: `Invalid animation duration "${animation.duration_ms}". Must be a positive number. Defaulting to 500ms.`
 			});
 			animation.duration_ms = 500;
 		}
-		this.#hasAnimation = (animation.type === 'slide' || animation.type === 'fade');
+		this.#hasAnimation = VALID_ANIMATIONS.includes(animation.type) && animation.type !== 'none';
 		if(this.#debug) console.log('hasAnimation:', this.#hasAnimation);
 		if(this.#hasAnimation){
 			this.#setCSSAnimationVariables(animation);
@@ -435,6 +527,20 @@ export default class NotiToast {
 		this.#toastElem.classList.add('ntl-toast');
 		if(this.#debug) console.groupEnd();
 	}
+	#applyCSSProperties(styleConfig){
+		Object.entries(CSS_PROPERTY_MAP).forEach(([configKey, cssVar]) => {
+			if (styleConfig[configKey] !== undefined) {
+				this.#toastElem.style.setProperty(cssVar, styleConfig[configKey]);
+			}
+		});
+	}
+	#getIconHTML(iconName){
+		if (INLINE_ICONS[iconName]) {
+			return `<svg class="ntl-svg-icon" viewBox="0 0 24 24" aria-hidden="true">${INLINE_ICONS[iconName]}</svg>`;
+		}
+		// Fallback to external file for custom icons
+		return `<svg class="ntl-svg-icon" aria-hidden="true"><use xlink:href="./lib/svg/symbols.svg#${iconName}"/></svg>`;
+	}
 	#triggerCloseAnimationOn(event){
 		this.#dynamic_remove_event = new Event(event);
 		this.#toastElem.addEventListener(event, ()=>{
@@ -480,6 +586,10 @@ export default class NotiToast {
 		toast_container.remove();
 		if(this.#debug) console.log('container-removed');
 	}
+	/**
+	 * Updates the toast configuration with new options
+	 * @param {Object} options - Configuration options to update (same as constructor options)
+	 */
 	update(options){
 		if(this.#debug) console.group('UPDATE()');
 		let can_close = false, auto_close = false;
@@ -496,28 +606,34 @@ export default class NotiToast {
 		}
 		if(this.#debug) console.groupEnd();
 	}
+	/**
+	 * Displays the toast notification
+	 */
 	open(){
 		if(this.#debug){
 			console.log('HasAnimation:', this.#hasAnimation);
 			console.log('ProgressBar:', this.#progressBarIsActive);
 			console.log('AutoClose:', this.#autoCloseIsActive);
 		}
-		setTimeout(()=>{
-			this.#onOpen();
-			if(this.#hasAnimation)
-				this.#runAnimation();
-			else
-				this.#toastElem.classList.add('ntl-show');
-			if(this.#autoCloseIsActive) {
-				this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
-				if(this.#progressBarIsActive)
-					this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
-			}
-		}, 50);
-		//this setTimeout() hack is needed to make the animations work with Firefox
-		//slide-in and fade-in animations didn't animate the toast, it just appeared in both cases,
-		//but the slide-out and fade-out animations executed without a problem.
+		// Double rAF ensures DOM is ready before animation starts (replaces setTimeout hack for Firefox)
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				this.#onOpen();
+				if(this.#hasAnimation)
+					this.#runAnimation();
+				else
+					this.#toastElem.classList.add('ntl-show');
+				if(this.#autoCloseIsActive) {
+					this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
+					if(this.#progressBarIsActive)
+						this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
+				}
+			});
+		});
 	}
+	/**
+	 * Manually closes the toast notification
+	 */
 	close(){
 		this.#toastElem.dispatchEvent(this.#dynamic_remove_event);
 	}

@@ -190,6 +190,14 @@ Requires modern browsers with support for:
 - **Current feature branch**: `claude-code-improvement`
 - Commit messages should be concise and descriptive
 
+## Development Workflow
+
+**Important:** When working through the ROADMAP.md phases:
+- Complete all tasks in a phase before moving to the next
+- **Always commit changes before moving to another phase**
+- Do not start a new phase until the previous phase's changes are committed
+- Each phase should result in at least one commit
+
 ## Debug Mode
 
 Enable debug logging:
