@@ -8,12 +8,13 @@ const DEFAULT_OPTIONS = {
 	theme: 'light',
 	type: 'default',
 	style: {
-		'background-color': 'white',
-		'border': '1px solid hsla(60, 2%, 74%, 1)',
-		'color': 'hsla(0, 0%,0%, 1)',
+		//'background-color': 'white',
+		//'border': '1px solid hsla(60, 2%, 74%, 1)',
+		//'color': 'hsla(0, 0%,0%, 1)',
 	},
-	canClose: false,
-	autoClose: 20,
+	canClose: true,
+	classes: {},
+	autoClose: false,
 	onClose: ()=>{},
 	showProgressBar: false,
 	pauseOnHover: false,
@@ -30,6 +31,7 @@ export default class NotiToast {
 
 	#theme;
 	#type;
+	#classes;
 
 	#checkVisibilityState = ()=>{};
 
@@ -55,6 +57,11 @@ export default class NotiToast {
 
 	#isNotPaused = true;
 	#recoverFocus;
+
+	#tourSteps;
+	#tourButtons;
+	#currentTourStep = 0;
+	#tourBoundHandler;
 
 	#debug;
 	/*endregion*/
@@ -91,119 +98,137 @@ export default class NotiToast {
 
 		let type = {};
 		if(this.#type !== 'custom') { // general config for ALL predetermine types
-			type.color = type.iconColor = type.afterColor = 'hsla(250, 50%, 90%, 1)';
+			type.color = type.iconColor = type.afterColor = 'hsla(224, 15%, 20%, 1)';
+			type.bgColor = 'hsla(255, 100%, 100%, 1)';
+			type.borderColor = 'hsla(250, 50%, 90%, 1)';
 			type.progBarLength = 0;
 			type.progBarHeight = 3;
-			type.border = '1px solid hsla(250, 50%,90%, 1)';
+			type.border = `1px solid ${ type.borderColor }`;
 		}
 
 		if(this.#type === 'info') {
 			if(this.#theme === 'light') {
-				//type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(200, 70%, 35%, 1)';
 				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(200, 70%, 55%, 1)';
 				type.bgColor = 'hsla(200, 70%, 85%, 1)';
-				type.border = '1px solid hsla(200, 70%, 30%, 1)';
+				type.borderColor = 'hsla(200, 70%, 30%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			else if(this.#theme === 'solid') {
+				type.color = type.iconColor = type.progBarBgColor = 'hsla(200, 70%, 85%, 1)';
 				type.bgColor = 'hsla(200, 70%, 55%, 1)';
-				type.progBarBgColor = 'hsla(200, 70%, 85%, 1)';
 			}
 			else if(this.#theme === 'dark') {
-				type.iconColor = type.progBarBgColor = 'hsla(200, 70%, 55%, 1)';
+				type.color = 'hsla(200, 70%, 85%, 1)';
 				type.bgColor = 'hsla(200, 70%, 7%, 1)';
-				type.border = '1px solid hsla(200, 70%, 20%, 1)';
+				type.borderColor = 'hsla(200, 70%, 20%, 1)';
+				type.iconColor = type.progBarBgColor = 'hsla(200, 70%, 55%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="./lib/svg/symbols.svg#info"/>
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/scripts/noti-toast-lib/lib/svg/symbols.svg#info"/>
 					</svg>
-				</span>${this.#toastElem.innerHTML}</div>`;
+				</span>${this.#toastElem.innerHTML}</div>`.replace(/[\r\n\t]/gm, '');
 		}
 		else if(this.#type === 'success') {
 			if(this.#theme === 'light'){
-				type.bgColor = 'hsla(122, 50%, 85%, 1)';
-				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(122, 50%, 43%, 1)';
-				type.border = '1px solid hsla(122, 50%, 38%, 1)';
+				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(97, 34%, 50%, 1)';
+				type.bgColor = 'hsla(97, 34%, 85%, 1)';
+				type.borderColor = 'hsla(122, 50%, 38%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			else if(this.#theme === 'solid'){
-				type.bgColor = 'hsla(122, 50%, 43%, 1)';
-				type.progBarBgColor = 'hsla(122, 50%, 85%, 1)';
+				type.color = type.iconColor = type.progBarBgColor = 'hsla(97, 34%, 85%, 1)';
+				type.bgColor = 'hsla(97, 34%, 50%, 1)';
 			}
 			else if(this.#theme === 'dark'){
-				type.iconColor = type.progBarBgColor = 'hsla(122, 50%, 43%, 1)';
-				type.bgColor = 'hsla(122, 50%, 6%, 1)';
-				type.border = '1px solid hsla(122, 50%, 20%, 1)';
+				type.color = 'hsla(97, 34%, 85%, 1)';
+				type.bgColor = 'hsla(97, 34%, 10%, 1)';
+				type.borderColor = 'hsla(97, 34%, 20%, 1)';
+				type.iconColor = type.progBarBgColor = 'hsla(97, 34%, 50%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="./lib/svg/symbols.svg#success"/>
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/scripts/noti-toast-lib/lib/svg/symbols.svg#success"/>
 					</svg>
-				</span>${this.#toastElem.innerHTML}</div>`;
+				</span>${this.#toastElem.innerHTML}</div>`.replace(/[\r\n\t]/gm, '');
 		}
 		else if(this.#type === 'warning') {
 			if(this.#theme === 'light'){
-				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(48, 89%, 60%, 1)';
-				type.bgColor = 'hsla(48, 89%, 95%, 1)';
-				type.border = '1px solid hsla(48, 89%, 55%, 1)';
+				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(38, 100%, 58%, 1)';
+				type.bgColor = 'hsla(38, 100%, 85%, 1)';
+				type.borderColor = 'hsla(38, 100%, 55%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			else if(this.#theme === 'solid'){
-				type.bgColor = 'hsla(48, 89%, 60%, 1)';
-				type.color = type.iconColor = type.afterColor = 'hsla(48, 89%, 25%, 1)';
-				type.progBarBgColor = 'hsla(48, 89%, 85%, 1)';
-				type.border = '1px solid hsla(48, 89%,20%, 1)';
+				type.color = type.iconColor = type.afterColor = 'hsla(38, 100%, 25%, 1)';
+				type.bgColor = 'hsla(38, 100%, 58%, 1)';
+				type.borderColor = 'hsla(38, 100%, 20%, 1)';
+				type.progBarBgColor = 'hsla(38, 100%, 85%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			else if(this.#theme === 'dark'){
-				type.iconColor = type.progBarBgColor = 'hsla(48, 89%, 60%, 1)';
-				type.bgColor = 'hsla(48, 89%, 6%, 1)';
-				type.border = '1px solid hsla(48, 89%, 20%, 1)';
+				type.color = 'hsla(38, 100%, 85%, 1)';
+				type.bgColor = 'hsla(38, 100%, 10%, 1)';
+				type.borderColor = 'hsla(38, 100%, 20%, 1)';
+				type.iconColor = type.progBarBgColor = 'hsla(38, 100%, 58%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="./lib/svg/symbols.svg#warning"/>
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/scripts/noti-toast-lib/lib/svg/symbols.svg#warning"/>
 					</svg>
-				</span>${this.#toastElem.innerHTML}</div>`;
+				</span>${this.#toastElem.innerHTML}</div>`.replace(/[\r\n\t]/gm, '');
 		}
 		else if(this.#type === 'error') {
 			if(this.#theme === 'light'){
-				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(3, 79%, 41%, 1)';
-				type.bgColor = 'hsla(3, 79%, 85%, 1)';
-				type.border = '1px solid hsla(3, 79%, 35%, 1)';
+				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(15, 77%, 45%, 1)';
+				type.bgColor = 'hsla(15, 77%, 85%, 1)';
+				type.borderColor = 'hsla(15, 77%, 35%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			else if(this.#theme === 'solid'){
-				type.bgColor = 'hsla(3, 79%, 41%, 1)';
-				type.progBarBgColor = 'hsla(3, 79%, 78%, 1)';
+				type.color = type.iconColor = type.progBarBgColor = 'hsla(15, 77%, 85%, 1)';
+				type.bgColor = 'hsla(15, 77%, 45%, 1)';
 			}
 			else if(this.#theme === 'dark'){
-				type.iconColor = type.progBarBgColor = 'hsla(3, 79%, 41%, 1)';
-				type.bgColor = 'hsla(3, 79%, 7%, 1)';
-				type.border = '1px solid hsla(3, 79%, 20%, 1)';
+				type.color = 'hsla(15, 77%, 85%, 1)';
+				type.bgColor = 'hsla(15, 77%, 10%, 1)';
+				type.borderColor = 'hsla(15, 77%, 20%, 1)';
+				type.iconColor = type.progBarBgColor = 'hsla(15, 77%, 45%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			this.#toastElem.innerHTML =
 				`<div class="ntl-grid ntl-toast-content"><span>
 					<svg class="ntl-svg-icon" aria-hidden="true" title="">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="./lib/svg/symbols.svg#clear"/>
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/scripts/noti-toast-lib/lib/svg/symbols.svg#clear"/>
 					</svg>
-				</span>${this.#toastElem.innerHTML}</div>`;
+				</span>${this.#toastElem.innerHTML}</div>`.replace(/[\r\n\t]/gm, '');
 		}
 		if(this.#type === 'default') {
 			if(this.#theme === 'light'){
-				type.color = type.afterColor = 'hsla(0, 0%,0%, 1)';
+				type.color = type.afterColor = 'hsla(224, 15%, 20%, 1)';
 				type.bgColor = 'hsla(255, 100%, 100%, 1)';
-				type.progBarBgColor = 'hsla(60, 2%, 34%, 1)';
-				type.border = '1px solid hsla(60, 2%, 74%, 1)';
+				type.borderColor = 'hsla(60, 2%, 74%, 1)';
+				type.progBarBgColor = 'hsla(0, 0%, 50%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			else if(this.#theme === 'solid'){
-				type.color = type.afterColor = type.progBarBgColor = 'hsla(0, 0%,0%, 1)';
-				type.bgColor = 'hsla(60, 2%, 34%, 1)';
-				type.border = '1px solid hsla(0, 0%, 0%, 1)';
+				type.color = type.iconColor = type.afterColor = type.progBarBgColor = 'hsla(224, 15%, 20%, 1)';
+				type.bgColor = 'hsla(0, 0%, 50%, 1)';
+				type.borderColor = 'hsla(224, 15%, 20%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 			else if(this.#theme === 'dark'){
-				type.color = type.afterColor = type.progBarBgColor = 'hsla(255, 100%, 100%, 1)';
-				type.bgColor = 'hsla(0, 0%, 0%, 1)';
-				type.border = '1px solid hsla(60, 2%, 74%, 1)';
+				type.color = 'hsla(0, 0%, 50%, 1)';
+				type.afterColor = type.progBarBgColor = 'hsla(255, 100%, 100%, 1)';
+				type.bgColor = 'hsla(224, 15%, 20%, 1)';
+				type.borderColor = 'hsla(60, 2%, 74%, 1)';
+				type.border = `1px solid ${ type.borderColor }`;
 			}
 		}
 
@@ -216,27 +241,36 @@ export default class NotiToast {
 		this.#toastElem.style.setProperty('--ntl-progress-bar-height', type.progBarHeight);
 		this.#toastElem.style.setProperty('--ntl-progress-bar-background-color', type.progBarBgColor);
 	}
+	/**
+	 * @param {string | numeric | boolean | null} value
+	 * */
 	set style(value){
 		if(this.#debug) console.log('SET: style');
-		/*if(this.#type === 'custom')*/
 		Object.entries( value ).forEach(([property, value]) => {
-			this.#toastElem.style.setProperty(`--ntl-${property}`, value);
+			if(isNaN(value)){
+				this.#toastElem.style.setProperty(`--ntl-${property}`, value);
+			}
+			else{
+				if(value === 'width'){
+					this.#toastElem.style.setProperty(`--ntl-${property}`, parseFloat(value));
+				}
+				else{
+					this.#toastElem.parentNode.style.setProperty(`--ntl-${property}`, parseFloat(value));
+				}
+			}
 		});
 	}
 	set position(value){
 		if(this.#debug) console.log('SET: position');
 		value = value.toLowerCase();
-		//select the current Toast container and position it, OR create it and position it.
 		const current_toast_container = this.#toastElem.parentElement,
 			selector = `.ntl-toast-container[data-position="${value}"]`,
-			toast_container = document.querySelector(selector) ?? createContainer(value);
-
-		if(value.includes('bottom'))
-			toast_container.prepend(this.#toastElem);
-		else
-			toast_container.append(this.#toastElem);
+			toast_container = document.querySelector(selector) ?? createContainer(
+				value, (this.#tourSteps ?? [{target: null}])[this.#currentTourStep].target
+			);
 
 		if(null === current_toast_container || current_toast_container.hasChildNodes()) return;
+
 		current_toast_container.remove();
 	}
 	set onOpen(value){
@@ -289,6 +323,10 @@ export default class NotiToast {
 			lastExecutionTime = currentAnimationFrameTime;
 			this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
 		};
+	}
+	set classes(value){
+		if(this.#debug) console.log('SET: classes');
+		this.#classes = value;
 	}
 	set animation(animation){
 		if(this.#debug) console.log('SET: animation');
@@ -365,6 +403,68 @@ export default class NotiToast {
 			document.removeEventListener("visibilitychange", this.#checkVisibilityState)
 		}
 	}
+	/**
+	 * @param { array | null } value
+	 * */
+	set steps(value){
+		if(this.#debug) console.log('SET: steps');
+		if(value){
+			this.#tourSteps = value;
+		}
+	}
+	set content(value){
+		if(this.#debug) console.log('SET: content/html');
+		if(undefined !== value && null !== value && value.length > 0)
+			this.#toastElem.innerHTML = `<span class="ntl-toast-message">${value}</span>`;
+	}
+	set buttons(value){
+		if(undefined === this.#tourButtons || null === this.#tourButtons){
+			this.#tourButtons = document.createElement('div');
+		}
+
+		this.#tourButtons.innerHTML  = '';
+		value.forEach((btnText)=>{
+			if(this.#debug) console.log('SET: buttons');
+
+			this.#tourButtons.dataset.ntlElement = 'buttons_container';
+			this.#tourButtons.classList.add('ntl-guide-buttons');
+
+			const btn = document.createElement('button'),
+				svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
+				use = document.createElementNS('http://www.w3.org/2000/svg','use'),
+				icons = {
+					next: '/assets/icons/utility-sprite/svg/symbols.svg#right', // play, breadcrumbs
+					back: '/assets/icons/utility-sprite/svg/symbols.svg#left', //undo, back
+					stop: '/assets/icons/utility-sprite/svg/symbols.svg#stop',
+					done: '/assets/icons/utility-sprite/svg/symbols.svg#close',
+				},
+				position = {
+					next: 'ntl-guide-buttons_next',
+					back: 'ntl-guide-buttons_back',
+					stop: 'ntl-guide-buttons_stop',
+					done: 'ntl-guide-buttons_stop',
+				};
+
+			use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', icons[btnText]);
+			svg.classList.add('ntl-btn_icon-normal');
+			svg.append(use);
+			btn.type = 'button';
+			btn.classList.add('ntl-btn', position[btnText]);
+			btn.dataset.ntlType = btnText;
+			btn.addEventListener('click', (e)=>{
+				console.log('fire:', e.currentTarget.dataset.ntlType);
+				switch (e.currentTarget.dataset.ntlType){
+					case 'next': { this.#tourGuideNext(); break; }
+					case 'back': { this.#tourGuidePrev(); break; }
+					case 'stop': { this.#currentTourStep = this.#tourSteps.progBarLength; this.#tourGuideNext(); break; }
+					case 'done': { this.#currentTourStep = this.#tourSteps.progBarLength; this.#tourGuideNext(); break; }
+				}
+			});
+			btn.append(svg);
+
+			this.#tourButtons.append(btn);
+		});
+	}
 	set debug(value){
 		if(this.#debug) console.log('SET: debug');
 		if(typeof value === 'string')
@@ -386,6 +486,7 @@ export default class NotiToast {
 		if(this.#debug) console.group('CREATE()');
 		this.#toastElem = document.createElement('div');
 		this.#toastElem.classList.add('ntl-toast');
+		this.#toastElem.dataset.ntlElement = 'toast';
 		if(this.#debug) console.groupEnd();
 	}
 	#triggerCloseAnimationOn(event){
@@ -425,13 +526,127 @@ export default class NotiToast {
 		cancelAnimationFrame(this.#progressBar_animationFrame);
 		cancelAnimationFrame(this.#autoClose_animationFrame);
 		cancelAnimationFrame(this.#animation_animationFrame);
-		this.#toastElem.remove();
-		if(this.#debug) console.log('toast-removed');
+
+		if(this.#debug) console.log('container:', toast_container);
+
+		if(null === toast_container || undefined === toast_container){ return; }
+
+		if(toast_container.hasChildNodes()) {
+			const containerIdx = toast_container.childNodes.length - 1 ;
+			for(let idx = containerIdx; idx >= 0; --idx){
+				if(toast_container.childNodes[idx]?.classList?.contains('ntl-guide-buttons')){
+					const elementIdx = toast_container.childNodes[idx]?.childNodes.length - 1;
+					for(let i = elementIdx; i>=0; --i){
+						toast_container.childNodes[idx]?.childNodes[i].remove();
+					}
+					toast_container.childNodes[idx]?.remove();
+					if(this.#debug) console.log('buttonsContainer:', toast_container.childNodes[idx]);
+				}
+				if(toast_container.childNodes[idx]?.classList?.contains('ntl-toast-arrow')){
+					toast_container.childNodes[idx]?.remove();
+					if(this.#debug) console.log('arrow:', toast_container.childNodes[idx]);
+				}
+			}
+			this.#toastElem.remove();
+			if(this.#debug) {
+				console.log('toast:', this.#toastElem);
+				console.log('toast-removed');
+			}
+			const describedElement = document.querySelector('.ntl-toast-guide-border');
+
+			if(null !== describedElement) {
+				describedElement.style.position = null;
+				describedElement.classList.remove('ntl-toast-guide-border');
+
+				document.removeEventListener('keydown', this.#tourBoundHandler);
+				this.#tourBoundHandler = null;
+			}
+		}
+
+		toast_container.remove();
+		if(this.#debug) {
+			console.log('container:', toast_container);
+			console.log('container-removed');
+		}
 
 		if(this.#debug) console.groupEnd();
-		if(toast_container.hasChildNodes()) return;
-		toast_container.remove();
-		if(this.#debug) console.log('container-removed');
+	}
+	#getContainer(){
+		let current_toast_container = this.#toastElem.parentElement;
+		if(undefined === current_toast_container || null === current_toast_container){
+			current_toast_container = document.querySelector(`div[data-ntl-element="container"]`);
+		}
+
+		return current_toast_container;
+	}
+	#tourGuideNext(){
+		if(this.#debug) console.group('TOUR_GUIDE_NEXT()');
+		this.close();
+		this.#currentTourStep++;
+		setTimeout(()=>{
+			/*console.log('STEP-IDX:', this.#currentTourStep);
+			console.log('length:', this.#tourSteps.length - 1);*/
+			const step = this.#tourSteps[this.#currentTourStep];
+
+			if (this.#currentTourStep < this.#tourSteps.length) {
+				this.update(step);
+				this.open();
+			}
+			else{
+				console.log('THIS:', this);
+			}
+
+			/*const tafier = document.querySelector('.ntl-scroll-wrapper');
+			console.log('TAFIER:', tafier);
+			tafier?.scrollIntoView({ behavior: 'smooth' });*/
+		}, 150);
+		if(this.#debug) console.groupEnd();
+	}
+	#tourGuidePrev(){
+		if(this.#debug) console.group('TOUR_GUIDE_BACK()');
+		this.close();
+		this.#currentTourStep--;
+		setTimeout(()=>{
+			const step = this.#tourSteps[this.#currentTourStep];
+
+			if (this.#currentTourStep < (this.#tourSteps.length - 1)) {
+				this.update(step);
+				this.open();
+			}
+		}, 150);
+		if(this.#debug) console.groupEnd();
+	}
+	#tourGuideKeyDownEvent(guide, event){
+		if(guide.#debug) console.group('GUIDE_KEYDOWN_EVENT()');
+		if(guide.#debug) console.log('eventKey:', event.key);
+
+		const container = guide.#getContainer();
+
+		if (event.key === 'ArrowRight') {
+			if(guide.#currentTourStep < (guide.#tourSteps.length)) guide.#tourGuideNext();
+		}
+		if (event.key === 'ArrowLeft') {
+			if(guide.#currentTourStep > 0) guide.#tourGuidePrev();
+		}
+		if (event.key === 'Escape') {
+			guide.#currentTourStep = guide.#tourSteps.length; guide.#tourGuideNext();
+		}
+
+		if(guide.#debug) console.groupEnd();
+	}
+	tourGuideStart(){
+		if(this.#debug) console.group('TOUR_GUIDE_START()');
+
+		if (!this.#tourSteps.length) { return; }
+
+		const step = this.#tourSteps[this.#currentTourStep];
+
+		if (this.#currentTourStep < this.#tourSteps.length) {
+			this.update(step);
+			this.open();
+		}
+
+		if(this.#debug) console.groupEnd();
 	}
 	update(options){
 		if(this.#debug) console.group('UPDATE()');
@@ -451,12 +666,29 @@ export default class NotiToast {
 	}
 	open(){
 		if(this.#debug){
-			console.log('HasAnimation:', this.#hasAnimation);
-			console.log('ProgressBar:', this.#progressBarIsActive);
-			console.log('AutoClose:', this.#autoCloseIsActive);
+			console.log('OPEN()');
 		}
 		setTimeout(()=>{
+			const toast_container = this.#getContainer();
 			this.#onOpen();
+
+			if(toast_container.dataset?.position.includes('bottom'))
+				toast_container.prepend(this.#toastElem);
+			else
+				toast_container.append(this.#toastElem);
+
+			if(undefined !== this.#tourButtons && null !== this.#tourButtons){
+				//toast_container.parentElement.classList.add(this.#classes.container);
+				if(toast_container.dataset?.position.includes('top')){
+					toast_container.prepend(this.#tourButtons);
+				}
+				else{
+					toast_container.append(this.#tourButtons);
+				}
+				this.#tourBoundHandler = this.#tourGuideKeyDownEvent.bind(null, this);
+				document.addEventListener('keydown', this.#tourBoundHandler);
+			}
+
 			if(this.#hasAnimation)
 				this.#runAnimation();
 			else
@@ -466,12 +698,17 @@ export default class NotiToast {
 				if(this.#progressBarIsActive)
 					this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
 			}
+
+
 		}, 50);
 		//this setTimeout() hack is needed to make the animations work with Firefox
 		//slide-in and fade-in animations didn't animate the toast, it just appeared in both cases,
 		//but the slide-out and fade-out animations executed without a problem.
 	}
 	close(){
+		if(this.#debug){
+			console.log('CLOSE()')
+		}
 		this.#toastElem.dispatchEvent(this.#dynamic_remove_event);
 	}
 	/*endregion*/
@@ -481,11 +718,42 @@ export default class NotiToast {
 	/*endregion*/
 }
 
-function createContainer(position){
+function createContainer(position, target = null){
+	console.group('CREATE_CONTAINER()');
 	const toast_container = document.createElement('div');
-	toast_container.classList.add('ntl-toast-container');
+
+	toast_container.dataset.ntlElement = 'container';
 	toast_container.dataset.position = position;
-	document.body.append(toast_container);
+
+	if(null !== target){
+		const targetElement = document.querySelector(target),
+			arrow = document.createElement('div');
+
+		if(!target.includes('data-ntl-guide')){
+			const tempArray = target.split('_');
+			let tempTargetName = '';
+
+			tempArray.forEach((str, idx)=>{
+				if(idx > 0){ tempTargetName += str + '-'; }
+			});
+			tempTargetName += 'temp';
+			targetElement.dataset.ntlGuide = tempTargetName;
+		}
+		targetElement.style.position = 'relative';
+		targetElement.classList.add('ntl-toast-guide-border');
+		//console.log('target:', targetElement);
+		arrow.classList.add('ntl-toast-arrow');
+		toast_container.append(arrow);
+		toast_container.classList.add('ntl-toast-container');
+		targetElement.append(toast_container);
+	}
+	else{
+		toast_container.classList.add('ntl-toast-container');
+		document.body.append(toast_container);
+	}
+
+	console.groupEnd()
+	
 	return toast_container;
 }
 function ntlConsoleWarning(params){
