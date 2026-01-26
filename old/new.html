@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>New Noti-Toast Demo</title>
+    <link rel="stylesheet" href="../src/noti-toast.css">
+    <style>
+        body { background: #2d2d2d; color: white; font-family: sans-serif; padding: 20px; }
+        button { margin: 5px; padding: 8px 16px; cursor: pointer; }
+        .group { margin-bottom: 20px; }
+        h2 { margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <h1>New Noti-Toast (current branch)</h1>
+    <div class="group">
+        <h2>Light Theme</h2>
+        <button onclick="fire('light', 'default')">Default</button>
+        <button onclick="fire('light', 'info')">Info</button>
+        <button onclick="fire('light', 'success')">Success</button>
+        <button onclick="fire('light', 'warning')">Warning</button>
+        <button onclick="fire('light', 'error')">Error</button>
+    </div>
+    <div class="group">
+        <h2>Solid Theme</h2>
+        <button onclick="fire('solid', 'default')">Default</button>
+        <button onclick="fire('solid', 'info')">Info</button>
+        <button onclick="fire('solid', 'success')">Success</button>
+        <button onclick="fire('solid', 'warning')">Warning</button>
+        <button onclick="fire('solid', 'error')">Error</button>
+    </div>
+    <div class="group">
+        <h2>Dark Theme</h2>
+        <button onclick="fire('dark', 'default')">Default</button>
+        <button onclick="fire('dark', 'info')">Info</button>
+        <button onclick="fire('dark', 'success')">Success</button>
+        <button onclick="fire('dark', 'warning')">Warning</button>
+        <button onclick="fire('dark', 'error')">Error</button>
+    </div>
+    <script type="module">
+        import NotiToast from '../src/noti-toast.js';
+        window.fire = function(theme, type) {
+            new NotiToast({
+                text: `${theme} / ${type}`,
+                theme: theme,
+                type: type,
+                position: 'top-right',
+                canClose: true,
+                autoClose: 8000,
+                animation: { type: 'slide', duration_ms: 300 }
+            }).open();
+        };
+    </script>
+</body>
+</html>

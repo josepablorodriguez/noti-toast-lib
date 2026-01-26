@@ -17,10 +17,13 @@ noti-toast-lib/
 │   ├── parseFunction.js      # Function string parser (avoids eval)
 │   └── svg/
 │       └── symbols.svg       # SVG icon symbols for notification types
+├── old/                      # TEMPORARY: Legacy code for comparison (will be deleted)
 ├── index.html                # Interactive demo page
 ├── script.js                 # Demo script
 └── style.css                 # Demo page styling
 ```
+
+> **Note:** The `old/` directory contains legacy library files extracted from `main` branch for comparison purposes. This directory is temporary and will be deleted once no longer needed.
 
 ## Technology Stack
 
@@ -65,6 +68,7 @@ php -S localhost:8000
 - **Prefix**: All classes use `ntl-` prefix (Noti Toast Library)
 - **CSS Variables**: Use `--ntl-` prefix for custom properties
 - **Themes**: Defined via class modifiers (`.ntl-toast-solid`, `.ntl-toast-dark`)
+- **Units**: Currently uses `px` units. Preferred: migrate to `rem` units in a future phase.
 
 ### Naming Examples
 

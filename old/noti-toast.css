@@ -1,0 +1,341 @@
+:root {
+    --ntl-background-color: hsla(255, 100%, 100%, 1);
+    --ntl-color: hsla(0, 0%, 0%, 1);
+    --ntl-after-color: hsla(0, 0%,0%, 1);
+    --ntl-icon-color: hsla(0, 0%, 0%, 1);
+    --ntl-guide-bg-color: hsla(224, 15%, 20%, 1);
+    --ntl-guide-bg-color_hover: hsla(224, 15%, 60%, 1);
+
+    --ntl-border: 1px solid hsla(60, 2%, 74%, 1);
+
+    --ntl-progress-bar-length: 0;
+    --ntl-progress-bar-height: 3;
+    --ntl-progress-bar-background-color: hsla(60, 2%, 34%, 1);
+
+    --ntl-duration-ms: 500;
+
+    --ntl-top: 1rem;
+
+    --ntl-width: 16;
+}
+
+.ntl-toast{
+    box-sizing: border-box;
+    padding: .75rem;
+    background-color: var(--ntl-background-color);
+    color: var(--ntl-color);
+    border: var(--ntl-border);
+    border-radius: .25em;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    /*top: var(--ntl-top);*/
+}
+
+.ntl-toast.ntl-can-close::after{
+    content: "\00D7";
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    color: var(--ntl-after-color);
+    font-size: 1.35rem;
+}
+.ntl-toast.ntl-progress-bar::before{
+    content: "";
+    position: absolute;
+    height: calc( 1px * var(--ntl-progress-bar-height) );
+    width: calc( 100% * var(--ntl-progress-bar-length) );
+    background-color: var(--ntl-progress-bar-background-color);
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.ntl-toast-container{
+    position: fixed;
+    margin: 10px;
+    max-width: 98.5vw;
+    width: calc( 1rem * var(--ntl-width));
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    font-size: .9rem;
+    font-family: san-gilroy, serif !important;
+    letter-spacing: normal !important;
+    line-height: normal; !important;
+}
+.ntl-toast-container.ntl-scroll-wrapper {
+    scroll-margin-top: 2rem;
+}
+body > .ntl-toast-container {
+    top: var(--ntl-top);
+}
+
+/*region POSITION*/
+.ntl-toast-container[data-position^="top-"] { /* symbol: '^=' means starts with. */
+    top: 7.5%;
+}
+.ntl-toast-container[data-position^="middle"] { /* symbol: '^=' means starts with. */
+    top: 50%;
+    transform: translate(0, -50%);
+}
+.ntl-toast-container[data-position^="bottom-"] { /* symbol: '^=' means starts with. */
+    bottom: 0;
+}
+.ntl-toast-container[data-position$="-right"] { /* symbol: '$=' means ends with. */
+    right: 0;
+}
+.ntl-toast-container[data-position$="-center"] { /* symbol: '$=' means ends with. */
+    left: 50%;
+    transform: translateX(-50%);
+}
+.ntl-toast-container[data-position$="-left"] { /* symbol: '$=' means ends with. */
+    left: 0;
+}
+
+[data-ntl-guide] > .ntl-toast-container {
+    position: absolute !important;
+    display: block !important;
+    z-index: 1001;
+}
+
+[data-ntl-guide] > .ntl-toast-container[data-position^="top"] { /* symbol: '^=' means starts with. */
+    top: auto !important;
+    bottom: 100%;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position^="top-side"] { /* symbol: '^=' means starts with. */
+    top: 0 !important;
+    margin-top: 0 !important;
+    margin-left: 1rem;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position^="middle"] { /* symbol: '^=' means starts with. */
+    margin: 0 1rem 0 1rem;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position^="bottom"] { /* symbol: '^=' means starts with. */
+    bottom: auto !important;
+    top: 100%;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position$="-left"] { /* symbol: '$=' means ends with. */
+    left: auto !important;
+    right: 100%;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position$="-center"] { /* symbol: '$=' means ends with. */
+    margin: 1rem 0 1rem 0;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position$="-right"] { /* symbol: '$=' means ends with. */
+    right: auto !important;
+    left: 100%;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position="bottom-left"] {
+    bottom: auto !important;
+    right: auto !important;
+    top: 100%;
+    left: 10% !important;
+    margin: 1rem 0 1rem 0;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position="bottom-right"] {
+    bottom: auto !important;
+    left: auto !important;
+    top: 100%;
+    right: 10% !important;
+    margin: 1rem 0 1rem 0;
+}
+
+.ntl-toast-arrow {
+    position:absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 1002;
+}
+
+[data-ntl-guide] > .ntl-toast-container[data-position^="top-"] > .ntl-toast-arrow {
+    top: 100%;
+    border-width: 10px 10px 0 10px;
+    border-color: var(--ntl-guide-bg-color) transparent transparent transparent;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position^="top-side"] > .ntl-toast-arrow {
+    top: auto !important;
+    /*bottom: 70% !important;*/
+}
+[data-ntl-guide] > .ntl-toast-container[data-position^="middle"] > .ntl-toast-arrow { /* symbol: '^=' means starts with. */
+    top: 50%;
+    transform: translate(0, -50%);
+ }
+[data-ntl-guide] > .ntl-toast-container[data-position^="bottom-"] > .ntl-toast-arrow {
+    bottom: 100%;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent var(--ntl-guide-bg-color) transparent;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position$="-right"] > .ntl-toast-arrow {
+    right: 100%;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent var(--ntl-guide-bg-color) transparent transparent;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position$="side-right"] > .ntl-toast-arrow {
+    right: 100%;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position$="-center"] > .ntl-toast-arrow {
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+[data-ntl-guide] > .ntl-toast-container[data-position$="-left"] > .ntl-toast-arrow {
+    left: 100%;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent var(--ntl-guide-bg-color);
+}
+[data-ntl-guide] > .ntl-toast-container[data-position="bottom-left"] > .ntl-toast-arrow {
+    bottom: 100%;
+    left: 10%;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent var(--ntl-guide-bg-color) transparent;
+}
+[data-ntl-guide] > .ntl-toast-container[data-position="bottom-right"] > .ntl-toast-arrow {
+    bottom: 100%;
+    right: 10%;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent var(--ntl-guide-bg-color) transparent;
+}
+
+[data-ntl-guide] > .ntl-toast-container > .ntl-toast {
+    background-color: var(--ntl-guide-bg-color) !important;
+    color: white !important;
+    border-color: var(--ntl-guide-bg-color);
+}
+
+.ntl-toast-guide-border:has(.ntl-toast-container) {
+    border: 3px solid var(--ntl-guide-bg-color) !important;
+}
+/*endregion*/
+
+/*region ANIMATIONS*/
+/* slide */
+.ntl-toast-container[data-position$="-right"] .ntl-toast.ntl-slide { /* symbol: '$=' means ends with. */
+    transform: translateX( 110% ); /* positions it 10% outside of the screen to the right. */
+}
+.ntl-toast-container[data-position$="-left"] .ntl-toast.ntl-slide { /* symbol: '$=' means ends with. */
+    transform: translateX( -110% ); /* positions it 10% outside of the screen to the left. */
+}
+.ntl-toast-container[data-position="top-center"] .ntl-toast.ntl-slide {
+    transform: translateY( -110vh ); /* positions it 10vh outside of the screen at the top. */
+}
+.ntl-toast-container[data-position="bottom-center"] .ntl-toast.ntl-slide {
+    transform: translateY( 110vh ); /* positions it 10vh outside of the screen at the bottom. */
+}
+.ntl-toast-container > .ntl-toast.ntl-slide{/* instruction for all 'slide' animations */
+    transition: transform calc( 1ms * var(--ntl-duration-ms)) ease-in-out;
+}
+.ntl-toast-container > .ntl-toast.ntl-slide.ntl-show { /* instruction to run animation */
+    transform: translate(0, 0);
+}
+/* fade */
+.ntl-toast-container > .ntl-toast.ntl-fade{ /* instruction for all 'fade' animations */
+    opacity: 0;
+    transition: opacity calc( 1ms * var(--ntl-duration-ms)) ease-in-out;
+ }
+.ntl-toast-container > .ntl-toast.ntl-fade.ntl-show { /* instruction to run animation */
+    opacity: 1;
+}
+/*endregion*/
+
+.ntl-svg-icon {
+    width: 2rem;
+    height: 2rem;
+    line-height: 1;
+    overflow: hidden;
+    fill: var(--ntl-icon-color);
+    display: inline-block;
+}
+.ntl-toast-message {
+    display: inline-block;
+}
+
+.ntl-grid {
+    display: grid;
+}
+.ntl-toast-content {
+    grid-template-columns: 1fr 5fr;
+    align-items: center;
+}
+
+.ntl-guide-buttons {
+    display: grid;
+    position: relative;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-auto-rows: 0;
+    width: 100%;
+    max-height: 2rem;
+    height: 2rem;
+    background-color: var(--ntl-guide-bg-color);
+    padding: .25rem;
+    border-radius: .25em;
+    opacity: .85;
+    align-items: center;
+}
+.ntl-guide-buttons_next {
+    grid-column: 3;
+    justify-self: center;
+    align-self: center;
+}
+.ntl-guide-buttons_stop {
+    grid-column: 2;
+    justify-self: center;
+    align-self: center;
+}
+.ntl-guide-buttons_back {
+    grid-column: 1;
+    justify-self: center;
+    align-self: center;
+}
+
+.ntl-btn {
+    position: relative;
+    display: inline-block;
+    padding: 0 .5rem; /*top-bottom right-left*/
+    background-color: white;
+    color: var(--ntl-guide-bg-color);
+    text-decoration: none;
+    text-align: center;
+    text-overflow: ellipsis;
+    font-family: inherit;
+    white-space: normal;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    cursor: pointer;
+    overflow: hidden;
+    width: 2.5rem;
+    opacity: 1;
+    height: 1.35rem;
+}
+.ntl-btn:hover {
+    background-color: var(--ntl-guide-bg-color_hover);
+    color: var(--ntl-guide-bg-color);
+}
+.ntl-btn:focus-visible,
+.ntl-btn:active {
+    outline: 2px solid var(--ntl-guide-bg-color);
+    /*fill: var(--ihub-color-primary_hover);
+    color: var(--ihub-color-primary_hover);*/
+}
+
+.ntl-btn_icon {
+    width: .875rem;
+    height: .875rem;
+    fill: currentColor;
+}
+.ntl-btn_icon-normal {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+}
+.ntl-btn_icon-medium {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
+}
+.ntl-btn_icon-large {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: currentColor;
+}

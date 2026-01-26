@@ -29,10 +29,13 @@ const TYPE_CONFIGS = {
 			border: '1px solid hsla(200, 70%, 30%, 1)'
 		},
 		solid: {
-			bgColor: 'hsla(200, 70%, 55%, 1)',
-			progBarBgColor: 'hsla(200, 70%, 85%, 1)'
+			color: 'hsla(200, 70%, 85%, 1)',
+			iconColor: 'hsla(200, 70%, 85%, 1)',
+			progBarBgColor: 'hsla(200, 70%, 85%, 1)',
+			bgColor: 'hsla(200, 70%, 55%, 1)'
 		},
 		dark: {
+			color: 'hsla(200, 70%, 85%, 1)',
 			iconColor: 'hsla(200, 70%, 55%, 1)',
 			progBarBgColor: 'hsla(200, 70%, 55%, 1)',
 			bgColor: 'hsla(200, 70%, 7%, 1)',
@@ -41,88 +44,96 @@ const TYPE_CONFIGS = {
 	},
 	success: {
 		light: {
-			bgColor: 'hsla(122, 50%, 85%, 1)',
-			color: 'hsla(122, 50%, 43%, 1)',
-			iconColor: 'hsla(122, 50%, 43%, 1)',
-			afterColor: 'hsla(122, 50%, 43%, 1)',
-			progBarBgColor: 'hsla(122, 50%, 43%, 1)',
+			color: 'hsla(97, 34%, 50%, 1)',
+			iconColor: 'hsla(97, 34%, 50%, 1)',
+			afterColor: 'hsla(97, 34%, 50%, 1)',
+			progBarBgColor: 'hsla(97, 34%, 50%, 1)',
+			bgColor: 'hsla(97, 34%, 85%, 1)',
 			border: '1px solid hsla(122, 50%, 38%, 1)'
 		},
 		solid: {
-			bgColor: 'hsla(122, 50%, 43%, 1)',
-			progBarBgColor: 'hsla(122, 50%, 85%, 1)'
+			color: 'hsla(97, 34%, 85%, 1)',
+			iconColor: 'hsla(97, 34%, 85%, 1)',
+			progBarBgColor: 'hsla(97, 34%, 85%, 1)',
+			bgColor: 'hsla(97, 34%, 50%, 1)'
 		},
 		dark: {
-			iconColor: 'hsla(122, 50%, 43%, 1)',
-			progBarBgColor: 'hsla(122, 50%, 43%, 1)',
-			bgColor: 'hsla(122, 50%, 6%, 1)',
-			border: '1px solid hsla(122, 50%, 20%, 1)'
+			color: 'hsla(97, 34%, 85%, 1)',
+			iconColor: 'hsla(97, 34%, 50%, 1)',
+			progBarBgColor: 'hsla(97, 34%, 50%, 1)',
+			bgColor: 'hsla(97, 34%, 10%, 1)',
+			border: '1px solid hsla(97, 34%, 20%, 1)'
 		}
 	},
 	warning: {
 		light: {
-			color: 'hsla(48, 89%, 60%, 1)',
-			iconColor: 'hsla(48, 89%, 60%, 1)',
-			afterColor: 'hsla(48, 89%, 60%, 1)',
-			progBarBgColor: 'hsla(48, 89%, 60%, 1)',
-			bgColor: 'hsla(48, 89%, 95%, 1)',
-			border: '1px solid hsla(48, 89%, 55%, 1)'
+			color: 'hsla(38, 100%, 58%, 1)',
+			iconColor: 'hsla(38, 100%, 58%, 1)',
+			afterColor: 'hsla(38, 100%, 58%, 1)',
+			progBarBgColor: 'hsla(38, 100%, 58%, 1)',
+			bgColor: 'hsla(38, 100%, 85%, 1)',
+			border: '1px solid hsla(38, 100%, 55%, 1)'
 		},
 		solid: {
-			bgColor: 'hsla(48, 89%, 60%, 1)',
-			color: 'hsla(48, 89%, 25%, 1)',
-			iconColor: 'hsla(48, 89%, 25%, 1)',
-			afterColor: 'hsla(48, 89%, 25%, 1)',
-			progBarBgColor: 'hsla(48, 89%, 85%, 1)',
-			border: '1px solid hsla(48, 89%, 20%, 1)'
+			color: 'hsla(38, 100%, 25%, 1)',
+			iconColor: 'hsla(38, 100%, 25%, 1)',
+			afterColor: 'hsla(38, 100%, 25%, 1)',
+			progBarBgColor: 'hsla(38, 100%, 85%, 1)',
+			bgColor: 'hsla(38, 100%, 58%, 1)',
+			border: '1px solid hsla(38, 100%, 20%, 1)'
 		},
 		dark: {
-			iconColor: 'hsla(48, 89%, 60%, 1)',
-			progBarBgColor: 'hsla(48, 89%, 60%, 1)',
-			bgColor: 'hsla(48, 89%, 6%, 1)',
-			border: '1px solid hsla(48, 89%, 20%, 1)'
+			color: 'hsla(38, 100%, 85%, 1)',
+			iconColor: 'hsla(38, 100%, 58%, 1)',
+			progBarBgColor: 'hsla(38, 100%, 58%, 1)',
+			bgColor: 'hsla(38, 100%, 10%, 1)',
+			border: '1px solid hsla(38, 100%, 20%, 1)'
 		}
 	},
 	error: {
 		light: {
-			color: 'hsla(3, 79%, 41%, 1)',
-			iconColor: 'hsla(3, 79%, 41%, 1)',
-			afterColor: 'hsla(3, 79%, 41%, 1)',
-			progBarBgColor: 'hsla(3, 79%, 41%, 1)',
-			bgColor: 'hsla(3, 79%, 85%, 1)',
-			border: '1px solid hsla(3, 79%, 35%, 1)'
+			color: 'hsla(15, 77%, 45%, 1)',
+			iconColor: 'hsla(15, 77%, 45%, 1)',
+			afterColor: 'hsla(15, 77%, 45%, 1)',
+			progBarBgColor: 'hsla(15, 77%, 45%, 1)',
+			bgColor: 'hsla(15, 77%, 85%, 1)',
+			border: '1px solid hsla(15, 77%, 35%, 1)'
 		},
 		solid: {
-			bgColor: 'hsla(3, 79%, 41%, 1)',
-			progBarBgColor: 'hsla(3, 79%, 78%, 1)'
+			color: 'hsla(15, 77%, 85%, 1)',
+			iconColor: 'hsla(15, 77%, 85%, 1)',
+			progBarBgColor: 'hsla(15, 77%, 85%, 1)',
+			bgColor: 'hsla(15, 77%, 45%, 1)'
 		},
 		dark: {
-			iconColor: 'hsla(3, 79%, 41%, 1)',
-			progBarBgColor: 'hsla(3, 79%, 41%, 1)',
-			bgColor: 'hsla(3, 79%, 7%, 1)',
-			border: '1px solid hsla(3, 79%, 20%, 1)'
+			color: 'hsla(15, 77%, 85%, 1)',
+			iconColor: 'hsla(15, 77%, 45%, 1)',
+			progBarBgColor: 'hsla(15, 77%, 45%, 1)',
+			bgColor: 'hsla(15, 77%, 10%, 1)',
+			border: '1px solid hsla(15, 77%, 20%, 1)'
 		}
 	},
 	default: {
 		light: {
-			color: 'hsla(0, 0%, 0%, 1)',
-			afterColor: 'hsla(0, 0%, 0%, 1)',
+			color: 'hsla(224, 15%, 20%, 1)',
+			afterColor: 'hsla(224, 15%, 20%, 1)',
 			bgColor: 'hsla(255, 100%, 100%, 1)',
-			progBarBgColor: 'hsla(60, 2%, 34%, 1)',
+			progBarBgColor: 'hsla(0, 0%, 50%, 1)',
 			border: '1px solid hsla(60, 2%, 74%, 1)'
 		},
 		solid: {
-			color: 'hsla(0, 0%, 0%, 1)',
-			afterColor: 'hsla(0, 0%, 0%, 1)',
-			progBarBgColor: 'hsla(0, 0%, 0%, 1)',
-			bgColor: 'hsla(60, 2%, 34%, 1)',
-			border: '1px solid hsla(0, 0%, 0%, 1)'
+			color: 'hsla(224, 15%, 20%, 1)',
+			iconColor: 'hsla(224, 15%, 20%, 1)',
+			afterColor: 'hsla(224, 15%, 20%, 1)',
+			progBarBgColor: 'hsla(224, 15%, 20%, 1)',
+			bgColor: 'hsla(0, 0%, 50%, 1)',
+			border: '1px solid hsla(224, 15%, 20%, 1)'
 		},
 		dark: {
-			color: 'hsla(255, 100%, 100%, 1)',
+			color: 'hsla(0, 0%, 50%, 1)',
 			afterColor: 'hsla(255, 100%, 100%, 1)',
 			progBarBgColor: 'hsla(255, 100%, 100%, 1)',
-			bgColor: 'hsla(0, 0%, 0%, 1)',
+			bgColor: 'hsla(224, 15%, 20%, 1)',
 			border: '1px solid hsla(60, 2%, 74%, 1)'
 		}
 	}
@@ -174,11 +185,7 @@ const DEFAULT_OPTIONS = {
 	position: 'top-right',
 	theme: 'light',
 	type: 'default',
-	style: {
-		'background-color': 'white',
-		'border': '1px solid hsla(60, 2%, 74%, 1)',
-		'color': 'hsla(0, 0%,0%, 1)',
-	},
+	style: {},
 	canClose: false,
 	autoClose: 20,
 	onClose: ()=>{},
@@ -189,6 +196,12 @@ const DEFAULT_OPTIONS = {
 		type: 'none',
 		duration_ms: 10,
 	},
+	icon: undefined,
+	iconColor: undefined,
+	actions: undefined,
+	group: undefined,
+	count: undefined,
+	rtl: undefined,
 };
 
 /**
@@ -203,6 +216,17 @@ const DEFAULT_OPTIONS = {
  * toast.open();
  */
 export default class NotiToast {
+	/*region STATIC FIELDS */
+	static #globalConfig = {
+		maxToasts: Infinity,
+		newestOnTop: true,
+		preventDuplicates: false,
+	};
+	static #registry = new Map();
+	static #queue = new Map();
+	static #groups = new Map();
+	/*endregion*/
+
 	/*region PRIVATE VARS */
 	#toastElem;
 
@@ -239,6 +263,19 @@ export default class NotiToast {
 	#handleMouseOver = () => { this.#isNotPaused = false; };
 	#handleMouseLeave = () => { this.#isNotPaused = true; };
 
+	#customIcon;
+	#position_value;
+	#text_value;
+	#isQueued = false;
+	#isVisible = false;
+	#group;
+	#count;
+	#openResolve;
+	#closeResolve;
+	#actionsContainer;
+	#actionCleanup = [];
+	#isRTL = false;
+
 	#debug;
 	/*endregion*/
 
@@ -262,6 +299,12 @@ export default class NotiToast {
 	 * @param {Function} [options.onOpen] - Callback when toast opens
 	 * @param {Function} [options.onClose] - Callback when toast closes
 	 * @param {boolean} [options.debug=false] - Enable debug logging
+	 * @param {string} [options.icon] - Custom SVG path content for icon
+	 * @param {string} [options.iconColor] - Custom icon color (CSS value)
+	 * @param {Array} [options.actions] - Action buttons [{label, onClick, close, className}]
+	 * @param {string} [options.group] - Group identifier for toast grouping
+	 * @param {number} [options.count] - Count to display in group badge
+	 * @param {boolean} [options.rtl] - RTL mode (true/false/undefined for auto-detect)
 	 */
 	constructor(options) {
 		this.update({ debug: options.debug });
@@ -274,6 +317,177 @@ export default class NotiToast {
 		}
 	}
 
+	/*region STATIC METHODS */
+	/**
+	 * Configure global toast queue settings
+	 * @param {Object} options - Global configuration
+	 * @param {number} [options.maxToasts=Infinity] - Maximum visible toasts per position
+	 * @param {boolean} [options.newestOnTop=true] - Show newest toasts on top
+	 * @param {boolean} [options.preventDuplicates=false] - Prevent duplicate messages
+	 * @returns {Object} Current global configuration (copy)
+	 */
+	static config(options = {}) {
+		if (typeof options.maxToasts === 'number' && options.maxToasts > 0) {
+			NotiToast.#globalConfig.maxToasts = options.maxToasts;
+		}
+		if (typeof options.newestOnTop === 'boolean') {
+			NotiToast.#globalConfig.newestOnTop = options.newestOnTop;
+		}
+		if (typeof options.preventDuplicates === 'boolean') {
+			NotiToast.#globalConfig.preventDuplicates = options.preventDuplicates;
+		}
+		return { ...NotiToast.#globalConfig };
+	}
+
+	/**
+	 * Close all active toasts, optionally filtered by position
+	 * @param {string} [position] - Position to clear (if omitted, clears all)
+	 */
+	static clearAll(position = null) {
+		if (position) {
+			const set = NotiToast.#registry.get(position);
+			if (set) {
+				for (const toast of [...set]) { toast.close(); }
+			}
+			NotiToast.#queue.delete(position);
+		} else {
+			for (const [, set] of NotiToast.#registry) {
+				for (const toast of [...set]) { toast.close(); }
+			}
+			NotiToast.#queue.clear();
+		}
+	}
+
+	/**
+	 * Create and show a success toast
+	 * @param {string} text - Message text
+	 * @param {Object} [options] - Additional options
+	 * @returns {NotiToast} The toast instance
+	 */
+	static success(text, options = {}) {
+		const toast = new NotiToast({
+			text, type: 'success', canClose: true,
+			autoClose: 3000,
+			animation: { type: 'slide', duration_ms: 300 },
+			...options
+		});
+		toast.open();
+		return toast;
+	}
+
+	/**
+	 * Create and show an error toast
+	 * @param {string} text - Message text
+	 * @param {Object} [options] - Additional options
+	 * @returns {NotiToast} The toast instance
+	 */
+	static error(text, options = {}) {
+		const toast = new NotiToast({
+			text, type: 'error', canClose: true,
+			autoClose: 5000,
+			animation: { type: 'slide', duration_ms: 300 },
+			...options
+		});
+		toast.open();
+		return toast;
+	}
+
+	/**
+	 * Create and show a warning toast
+	 * @param {string} text - Message text
+	 * @param {Object} [options] - Additional options
+	 * @returns {NotiToast} The toast instance
+	 */
+	static warning(text, options = {}) {
+		const toast = new NotiToast({
+			text, type: 'warning', canClose: true,
+			autoClose: 4000,
+			animation: { type: 'slide', duration_ms: 300 },
+			...options
+		});
+		toast.open();
+		return toast;
+	}
+
+	/**
+	 * Create and show an info toast
+	 * @param {string} text - Message text
+	 * @param {Object} [options] - Additional options
+	 * @returns {NotiToast} The toast instance
+	 */
+	static info(text, options = {}) {
+		const toast = new NotiToast({
+			text, type: 'info', canClose: true,
+			autoClose: 3000,
+			animation: { type: 'slide', duration_ms: 300 },
+			...options
+		});
+		toast.open();
+		return toast;
+	}
+
+	static #register(instance, position) {
+		if (!NotiToast.#registry.has(position)) {
+			NotiToast.#registry.set(position, new Set());
+		}
+		NotiToast.#registry.get(position).add(instance);
+	}
+
+	static #unregister(instance, position) {
+		const positionSet = NotiToast.#registry.get(position);
+		if (positionSet) {
+			positionSet.delete(instance);
+			if (positionSet.size === 0) {
+				NotiToast.#registry.delete(position);
+			}
+		}
+		NotiToast.#processQueue(position);
+	}
+
+	static #processQueue(position) {
+		const queue = NotiToast.#queue.get(position);
+		if (!queue || queue.length === 0) return;
+
+		const currentCount = NotiToast.#registry.has(position)
+			? NotiToast.#registry.get(position).size
+			: 0;
+
+		if (currentCount < NotiToast.#globalConfig.maxToasts) {
+			const nextToast = queue.shift();
+			if (queue.length === 0) NotiToast.#queue.delete(position);
+			NotiToast.#register(nextToast, position);
+			nextToast.#showImmediate();
+		}
+	}
+
+	static #canShow(instance, position) {
+		if (NotiToast.#globalConfig.preventDuplicates && instance.#text_value) {
+			const existing = NotiToast.#registry.get(position);
+			if (existing) {
+				for (const toast of existing) {
+					if (toast.#text_value === instance.#text_value && toast.#isVisible) {
+						return false;
+					}
+				}
+			}
+		}
+
+		const currentCount = NotiToast.#registry.has(position)
+			? NotiToast.#registry.get(position).size
+			: 0;
+
+		return currentCount < NotiToast.#globalConfig.maxToasts;
+	}
+
+	static #enqueue(instance, position) {
+		if (!NotiToast.#queue.has(position)) {
+			NotiToast.#queue.set(position, []);
+		}
+		NotiToast.#queue.get(position).push(instance);
+		instance.#isQueued = true;
+	}
+	/*endregion*/
+
 	/*region SETTERS */
 	/**
 	 * Sets the plain text content of the toast
@@ -282,6 +496,7 @@ export default class NotiToast {
 	set text(value){
 		if(this.#debug) console.log('SET: text');
 		if(undefined !== value && null !== value && value.length > 0) {
+			this.#text_value = value;
 			const span = document.createElement('span');
 			span.className = 'ntl-toast-message';
 			span.textContent = value;
@@ -298,6 +513,26 @@ export default class NotiToast {
 		// WARNING: Uses innerHTML - caller is responsible for sanitizing input to prevent XSS
 		if(undefined !== value && null !== value && value.length > 0)
 			this.#toastElem.innerHTML = `<span class="ntl-toast-message">${value}</span>`;
+	}
+	/**
+	 * Sets the custom icon SVG path content
+	 * @param {string} value - SVG inner content (path elements)
+	 */
+	set icon(value) {
+		if(this.#debug) console.log('SET: icon');
+		if (value !== undefined && value !== null) {
+			this.#customIcon = value;
+		}
+	}
+	/**
+	 * Sets the custom icon color
+	 * @param {string} value - CSS color value
+	 */
+	set iconColor(value) {
+		if(this.#debug) console.log('SET: iconColor');
+		if (value !== undefined && value !== null) {
+			this.#toastElem.style.setProperty('--ntl-icon-color', value);
+		}
 	}
 	/**
 	 * Sets the visual theme of the toast
@@ -321,9 +556,10 @@ export default class NotiToast {
 
 		// Base config for all predefined types
 		let typeStyles = {
-			color: 'hsla(250, 50%, 90%, 1)',
-			iconColor: 'hsla(250, 50%, 90%, 1)',
-			afterColor: 'hsla(250, 50%, 90%, 1)',
+			color: 'hsla(224, 15%, 20%, 1)',
+			iconColor: 'hsla(224, 15%, 20%, 1)',
+			afterColor: 'hsla(224, 15%, 20%, 1)',
+			bgColor: 'hsla(255, 100%, 100%, 1)',
 			progBarLength: 0,
 			progBarHeight: 3,
 			border: '1px solid hsla(250, 50%, 90%, 1)'
@@ -341,6 +577,12 @@ export default class NotiToast {
 			this.#toastElem.innerHTML = `<div class="ntl-grid ntl-toast-content"><span>${iconHTML}</span>${this.#toastElem.innerHTML}</div>`;
 		}
 
+		// Add custom icon for 'custom' type
+		if (this.#type === 'custom' && this.#customIcon) {
+			const iconHTML = `<svg class="ntl-svg-icon" viewBox="0 0 24 24" aria-hidden="true">${this.#customIcon}</svg>`;
+			this.#toastElem.innerHTML = `<div class="ntl-grid ntl-toast-content"><span>${iconHTML}</span>${this.#toastElem.innerHTML}</div>`;
+		}
+
 		// Apply all CSS properties
 		this.#applyCSSProperties(typeStyles);
 	}
@@ -350,7 +592,6 @@ export default class NotiToast {
 	 */
 	set style(value){
 		if(this.#debug) console.log('SET: style');
-		/*if(this.#type === 'custom')*/
 		Object.entries( value ).forEach(([property, value]) => {
 			this.#toastElem.style.setProperty(`--ntl-${property}`, value);
 		});
@@ -362,15 +603,28 @@ export default class NotiToast {
 	set position(value){
 		if(this.#debug) console.log('SET: position');
 		value = validateOption(value, VALID_POSITIONS, 'top-right', 'position');
-		//select the current Toast container and position it, OR create it and position it.
+
+		// Mirror position for RTL
+		if (this.#isRTL) {
+			value = value.replace('-left', '__LEFT__')
+				.replace('-right', '-left')
+				.replace('__LEFT__', '-right');
+		}
+
+		this.#position_value = value;
+
 		const current_toast_container = this.#toastElem.parentElement,
 			selector = `.ntl-toast-container[data-position="${value}"]`,
 			toast_container = document.querySelector(selector) ?? createContainer(value);
 
-		if(value.includes('bottom'))
+		if (NotiToast.#globalConfig.newestOnTop) {
 			toast_container.prepend(this.#toastElem);
-		else
-			toast_container.append(this.#toastElem);
+		} else {
+			if(value.includes('bottom'))
+				toast_container.prepend(this.#toastElem);
+			else
+				toast_container.append(this.#toastElem);
+		}
 
 		if(null === current_toast_container || current_toast_container.hasChildNodes()) return;
 		current_toast_container.remove();
@@ -524,6 +778,94 @@ export default class NotiToast {
 			document.removeEventListener("visibilitychange", this.#checkVisibilityState)
 		}
 	}
+	/**
+	 * Sets action buttons for the toast
+	 * @param {Array} value - Array of action objects [{label, onClick, close, className}]
+	 */
+	set actions(value) {
+		if(this.#debug) console.log('SET: actions');
+		if (!Array.isArray(value) || value.length === 0) return;
+
+		if (this.#actionsContainer) {
+			this.#actionsContainer.remove();
+			this.#actionCleanup.forEach(fn => fn());
+			this.#actionCleanup = [];
+		}
+
+		this.#actionsContainer = document.createElement('div');
+		this.#actionsContainer.className = 'ntl-toast-actions';
+
+		value.forEach((action) => {
+			if (!action.label) return;
+
+			const btn = document.createElement('button');
+			btn.className = 'ntl-toast-action-btn';
+			if (action.className) btn.classList.add(action.className);
+			btn.textContent = action.label;
+			btn.setAttribute('type', 'button');
+
+			const handler = (e) => {
+				e.stopPropagation();
+				if (typeof action.onClick === 'function') {
+					action.onClick(this.#toastElem);
+				}
+				if (action.close) {
+					this.close();
+				}
+			};
+
+			btn.addEventListener('click', handler);
+			this.#actionCleanup.push(() => btn.removeEventListener('click', handler));
+			this.#actionsContainer.appendChild(btn);
+		});
+
+		this.#toastElem.appendChild(this.#actionsContainer);
+	}
+	/**
+	 * Sets the group identifier for toast grouping
+	 * @param {string} value - Group identifier
+	 */
+	set group(value) {
+		if(this.#debug) console.log('SET: group');
+		if (value === undefined || value === null) return;
+		this.#group = String(value);
+	}
+	/**
+	 * Sets the count displayed in the group badge
+	 * @param {number} value - Count to display
+	 */
+	set count(value) {
+		if(this.#debug) console.log('SET: count');
+		if (value === undefined || value === null) return;
+		this.#count = parseInt(value);
+		if (this.#toastElem) {
+			let badge = this.#toastElem.querySelector('.ntl-group-badge');
+			if (!badge) {
+				badge = document.createElement('span');
+				badge.className = 'ntl-group-badge';
+				this.#toastElem.appendChild(badge);
+			}
+			badge.textContent = this.#count;
+		}
+	}
+	/**
+	 * Sets RTL mode
+	 * @param {boolean|undefined} value - true for RTL, false for LTR, undefined for auto-detect
+	 */
+	set rtl(value) {
+		if(this.#debug) console.log('SET: rtl');
+		if (typeof value === 'boolean') {
+			this.#isRTL = value;
+		} else {
+			this.#isRTL = this.#detectRTL();
+		}
+		this.#toastElem.classList.toggle('ntl-rtl', this.#isRTL);
+		if (this.#isRTL) {
+			this.#toastElem.setAttribute('dir', 'rtl');
+		} else {
+			this.#toastElem.removeAttribute('dir');
+		}
+	}
 	set debug(value){
 		if(this.#debug) console.log('SET: debug');
 		if(typeof value === 'string')
@@ -549,6 +891,13 @@ export default class NotiToast {
 		this.#toastElem.setAttribute('aria-live', 'polite');
 		this.#toastElem.setAttribute('aria-atomic', 'true');
 		if(this.#debug) console.groupEnd();
+	}
+	#detectRTL() {
+		const htmlDir = document.documentElement.getAttribute('dir');
+		if (htmlDir) return htmlDir.toLowerCase() === 'rtl';
+		const bodyDir = document.body.getAttribute('dir');
+		if (bodyDir) return bodyDir.toLowerCase() === 'rtl';
+		return getComputedStyle(document.body).direction === 'rtl';
 	}
 	#applyCSSProperties(styleConfig){
 		Object.entries(CSS_PROPERTY_MAP).forEach(([configKey, cssVar]) => {
@@ -583,15 +932,72 @@ export default class NotiToast {
 	#setCSSAnimationVariables(animation){
 		if(undefined !== animation.duration_ms)
 			this.#toastElem.style.setProperty('--ntl-duration-ms', animation.duration_ms);
+	}
+	#showImmediate() {
+		this.#isVisible = true;
+		this.#isQueued = false;
+		if(this.#debug){
+			console.log('HasAnimation:', this.#hasAnimation);
+			console.log('ProgressBar:', this.#progressBarIsActive);
+			console.log('AutoClose:', this.#autoCloseIsActive);
+		}
+		// Double rAF ensures DOM is ready before animation starts (replaces setTimeout hack for Firefox)
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				this.#onOpen();
+				if(this.#hasAnimation) {
+					this.#runAnimation();
+					const resolveOpen = () => {
+						if (this.#openResolve) {
+							this.#openResolve();
+							this.#openResolve = null;
+						}
+					};
+					this.#toastElem.addEventListener('transitionend', resolveOpen, { once: true });
+				} else {
+					this.#toastElem.classList.add('ntl-show');
+					if (this.#openResolve) {
+						this.#openResolve();
+						this.#openResolve = null;
+					}
+				}
+				if(this.#autoCloseIsActive) {
+					this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
+					if(this.#progressBarIsActive)
+						this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
+				}
+			});
+		});
+	}
+	#animateStackReposition() {
+		const container = this.#toastElem.parentElement;
+		if (!container) return;
 
-		/*if(animation.type === 'slide') {
-		 this.#toastElem.style.setProperty('--translate_value', 110);
-		 this.#toastElem.style.setProperty('--transition_type', 'transform');
-		 }
-		 if(animation.type === 'fade'){
-		 this.#toastElem.style.setProperty('--translate_value', 0);
-		 this.#toastElem.style.setProperty('--transition_type', 'opacity');
-		 }*/
+		const toasts = Array.from(container.querySelectorAll('.ntl-toast'));
+		const toastIndex = toasts.indexOf(this.#toastElem);
+		if (toastIndex === -1) return;
+
+		const movingToasts = toasts.filter((t, i) => i !== toastIndex);
+		const positions = movingToasts.map(t => t.getBoundingClientRect());
+
+		this.#toastElem.remove();
+
+		movingToasts.forEach((toast, i) => {
+			const newRect = toast.getBoundingClientRect();
+			const deltaY = positions[i].top - newRect.top;
+			if (Math.abs(deltaY) > 1) {
+				toast.style.transform = `translateY(${deltaY}px)`;
+				toast.style.transition = 'none';
+				// Force reflow
+				toast.offsetHeight;
+				toast.style.transition = 'transform 200ms ease-out';
+				toast.style.transform = 'translateY(0)';
+				toast.addEventListener('transitionend', () => {
+					toast.style.transform = '';
+					toast.style.transition = '';
+				}, { once: true });
+			}
+		});
 	}
 	#remove(){
 		if(this.#debug) console.group('REMOVE()');
@@ -604,15 +1010,32 @@ export default class NotiToast {
 		if(this.#handleKeyDown) {
 			this.#toastElem.removeEventListener('keydown', this.#handleKeyDown);
 		}
-		this.#toastElem.remove();
+		this.#actionCleanup.forEach(fn => fn());
+		this.#actionCleanup = [];
+
+		// Animate stack repositioning (FLIP technique)
+		this.#animateStackReposition();
+
+		this.#isVisible = false;
+		NotiToast.#unregister(this, this.#position_value);
+
+		if (this.#group && NotiToast.#groups.get(this.#group) === this) {
+			NotiToast.#groups.delete(this.#group);
+		}
+
 		if(this.#previouslyFocusedElement && this.#previouslyFocusedElement.focus) {
 			this.#previouslyFocusedElement.focus();
 		}
-		if(this.#debug) console.log('toast-removed');
 
+		if (this.#closeResolve) {
+			this.#closeResolve();
+			this.#closeResolve = null;
+		}
+
+		if(this.#debug) console.log('toast-removed');
 		if(this.#debug) console.groupEnd();
-		if(toast_container.hasChildNodes()) return;
-		toast_container.remove();
+		if(toast_container && toast_container.hasChildNodes()) return;
+		if(toast_container) toast_container.remove();
 		if(this.#debug) console.log('container-removed');
 	}
 	/**
@@ -621,8 +1044,13 @@ export default class NotiToast {
 	 */
 	update(options){
 		if(this.#debug) console.group('UPDATE()');
+		// Process icon/iconColor first so they're available when type setter runs
+		if (options.icon !== undefined) this.icon = options.icon;
+		if (options.iconColor !== undefined) this.iconColor = options.iconColor;
+
 		let can_close = false, auto_close = false;
 		Object.entries( options ).forEach(([key, value]) => {
+			if (key === 'icon' || key === 'iconColor') return;
 			this[key] = value;
 			if(key === 'canClose') can_close = value;
 			if(key === 'autoClose') auto_close = value;
@@ -637,40 +1065,68 @@ export default class NotiToast {
 	}
 	/**
 	 * Displays the toast notification
+	 * @returns {Promise} Resolves when the toast is visible
 	 */
 	open(){
-		this.#previouslyFocusedElement = document.activeElement;
-		if(this.#debug){
-			console.log('HasAnimation:', this.#hasAnimation);
-			console.log('ProgressBar:', this.#progressBarIsActive);
-			console.log('AutoClose:', this.#autoCloseIsActive);
-		}
-		// Double rAF ensures DOM is ready before animation starts (replaces setTimeout hack for Firefox)
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
-				this.#onOpen();
-				if(this.#hasAnimation)
-					this.#runAnimation();
-				else
-					this.#toastElem.classList.add('ntl-show');
-				if(this.#autoCloseIsActive) {
-					this.#autoClose_animationFrame = requestAnimationFrame(this.#autoCloseCountDown);
-					if(this.#progressBarIsActive)
-						this.#progressBar_animationFrame = requestAnimationFrame(this.#progressBarUpdate);
+		return new Promise((resolve) => {
+			this.#openResolve = resolve;
+			this.#previouslyFocusedElement = document.activeElement;
+
+			// Handle toast grouping
+			if (this.#group) {
+				const existingGroupToast = NotiToast.#groups.get(this.#group);
+				if (existingGroupToast && existingGroupToast.#isVisible) {
+					const newCount = this.#count || ((existingGroupToast.#count || 1) + 1);
+					existingGroupToast.count = newCount;
+					if (this.#text_value) {
+						existingGroupToast.text = this.#text_value;
+					}
+					resolve();
+					return;
 				}
-			});
+				NotiToast.#groups.set(this.#group, this);
+			}
+
+			// Check queue constraints
+			if (!NotiToast.#canShow(this, this.#position_value)) {
+				if (NotiToast.#globalConfig.preventDuplicates) {
+					resolve();
+					return;
+				}
+				NotiToast.#enqueue(this, this.#position_value);
+				return;
+			}
+
+			NotiToast.#register(this, this.#position_value);
+			this.#showImmediate();
 		});
 	}
 	/**
 	 * Manually closes the toast notification
+	 * @returns {Promise} Resolves when the toast is removed
 	 */
 	close(){
-		this.#toastElem.dispatchEvent(this.#dynamic_remove_event);
+		return new Promise((resolve) => {
+			this.#closeResolve = resolve;
+			// If queued but not yet visible, remove from queue directly
+			if (this.#isQueued && !this.#isVisible) {
+				const queue = NotiToast.#queue.get(this.#position_value);
+				if (queue) {
+					const idx = queue.indexOf(this);
+					if (idx !== -1) queue.splice(idx, 1);
+					if (queue.length === 0) NotiToast.#queue.delete(this.#position_value);
+				}
+				this.#isQueued = false;
+				if (this.#openResolve) {
+					this.#openResolve();
+					this.#openResolve = null;
+				}
+				resolve();
+				return;
+			}
+			this.#toastElem.dispatchEvent(this.#dynamic_remove_event);
+		});
 	}
-	/*endregion*/
-
-	/*region TRIGGER METHODS */
-
 	/*endregion*/
 }
 
