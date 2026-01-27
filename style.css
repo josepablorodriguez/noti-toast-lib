@@ -222,3 +222,136 @@ select {
 select.ntl-value {
     width: 100%;
 }
+
+/* ============================================
+   Phase 4: New Features Demo Styles
+   ============================================ */
+
+.ntl-phase4-section {
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+.ntl-phase4-section h2 {
+    color: #333;
+    border-bottom: 2px solid #904d4c;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.ntl-feature-box {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.ntl-feature-box h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.ntl-feature-desc {
+    color: #666;
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+}
+
+.ntl-btn {
+    background: #555;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: background 0.2s;
+}
+
+.ntl-btn:hover {
+    background: #333;
+}
+
+.ntl-btn-success {
+    background: hsla(97, 34%, 50%, 1);
+}
+.ntl-btn-success:hover {
+    background: hsla(97, 34%, 40%, 1);
+}
+
+.ntl-btn-error {
+    background: hsla(15, 77%, 45%, 1);
+}
+.ntl-btn-error:hover {
+    background: hsla(15, 77%, 35%, 1);
+}
+
+.ntl-btn-warning {
+    background: hsla(38, 100%, 50%, 1);
+    color: #333;
+}
+.ntl-btn-warning:hover {
+    background: hsla(38, 100%, 40%, 1);
+}
+
+.ntl-btn-info {
+    background: hsla(200, 70%, 55%, 1);
+}
+.ntl-btn-info:hover {
+    background: hsla(200, 70%, 45%, 1);
+}
+
+.ntl-template-buttons {
+    margin-bottom: 1rem;
+}
+
+.ntl-code-example {
+    background: #1F2937;
+    color: #e0e0e0;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    margin: 1rem 0 0 0;
+}
+
+.ntl-code-example code {
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.ntl-queue-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.ntl-queue-controls label {
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.ntl-queue-controls input[type="number"] {
+    width: 60px;
+    padding: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.ntl-queue-controls input[type="checkbox"] {
+    accent-color: #7ec699;
+}
+
+.ntl-hint {
+    color: #888;
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-left: 0.5rem;
+}

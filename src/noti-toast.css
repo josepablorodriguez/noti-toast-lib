@@ -156,24 +156,26 @@
     align-items: center;
 }
 
-/* Group badge */
+/* Group badge - positioned top-left (near icon) */
 .ntl-group-badge {
     position: absolute;
-    top: -6px;
-    right: -6px;
-    background-color: var(--ntl-icon-color, #333);
+    top: 2px;
+    left: 2px;
+    background-color: #e74c3c;
     color: #fff;
-    border-radius: 50%;
-    min-width: 20px;
-    height: 20px;
+    border-radius: 10px;
+    min-width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: bold;
     line-height: 1;
-    padding: 0 4px;
+    padding: 0 5px;
     box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    z-index: 1;
 }
 
 /* Action buttons */
@@ -214,10 +216,16 @@
     left: 5px;
 }
 .ntl-toast.ntl-rtl .ntl-toast-content {
-    grid-template-columns: 5fr 1fr;
+    direction: ltr; /* Reset grid direction */
+    display: flex;
+    flex-direction: row-reverse; /* Icon on right, text on left */
+    align-items: center;
+    gap: 0.5rem;
 }
-.ntl-toast.ntl-rtl .ntl-toast-content > span:first-child {
-    order: 1;
+.ntl-toast.ntl-rtl .ntl-toast-content .ntl-toast-message {
+    direction: rtl;
+    text-align: right;
+    flex: 1;
 }
 .ntl-toast.ntl-rtl.ntl-progress-bar::before {
     left: auto;
@@ -225,10 +233,4 @@
 }
 .ntl-toast.ntl-rtl .ntl-toast-actions {
     flex-direction: row-reverse;
-}
-.ntl-toast-container[data-position$="-right"] .ntl-toast.ntl-rtl.ntl-slide {
-    transform: translateX(-110%);
-}
-.ntl-toast-container[data-position$="-left"] .ntl-toast.ntl-rtl.ntl-slide {
-    transform: translateX(110%);
 }

@@ -186,6 +186,7 @@ new NotiToast({
 
 ### 4.4 Toast Grouping
 **Priority:** Medium
+**Status:** Partially Implemented
 
 Group similar toasts together:
 ```javascript
@@ -196,12 +197,45 @@ new NotiToast({
 });
 ```
 
+**Current Implementation:**
+- Toasts with the same `group` ID share a single slot
+- New toasts update the existing grouped toast's text and increment the count badge
+- Badge displays in top-left corner (red circle with count)
+
+**Pending: Message History Feature**
+Currently, only the latest message is displayed. Users cannot see the full list of grouped messages.
+
+**Future Options to Consider:**
+1. **Remove grouping entirely** - Keep toasts simple and stacked (no grouping)
+2. **Keep as-is** - Shows count badge + latest message only (current behavior)
+3. **Enhance with message history** - More complex implementation:
+   - Store messages in an array within the grouped toast
+   - Show expandable list on click/hover
+   - Or link to a "notification center" panel
+   - Would require additional UI components and state management
+
 ### 4.5 RTL (Right-to-Left) Support
 **Priority:** Medium
+**Status:** Implemented
 
-- Detect `dir="rtl"` on document
-- Mirror positions and animations
-- Support `rtl` option override
+```javascript
+new NotiToast({
+  text: 'مرحبا بالعالم',
+  rtl: true,
+  position: 'top-right'
+});
+```
+
+**Current Implementation:**
+- `rtl: true` affects **content direction only** (text alignment, icon position, close button position)
+- Physical screen position remains as specified (top-right stays top-right)
+- Auto-detects RTL from document/body `dir` attribute if `rtl` option not specified
+
+**Future Option: Full RTL Mode**
+A future `rtlMirrorPosition: true` option could be added to also flip physical positions:
+- `top-right` would become `top-left`
+- Useful when the entire app is RTL and positions should follow logical (start/end) rather than physical (left/right) positioning
+- This would be opt-in, not default behavior
 
 ### 4.6 Custom Icons
 **Priority:** Low

@@ -105,6 +105,8 @@
                     <option value="none">None</option>
                     <option value="slide">Slide</option>
                     <option value="fade">Fade</option>
+                    <option value="bounce">Bounce</option>
+                    <option value="zoom">Zoom</option>
                   </select>
                 </div>                         <div class="ntl-node">
                 <input type="checkbox" id="duration_ms" class="ntl-property" checked="checked">
@@ -186,6 +188,111 @@
         </div>
       </div>
     </div>
-  </section> </main>
+  </section>
+
+  <!-- Phase 4: New Features Demo -->
+  <section class="ntl-phase4-section">
+    <h2>Phase 4: New Features</h2>
+
+    <!-- 4.1 Queue Management -->
+    <div class="ntl-feature-box">
+      <h3>Toast Queue Management</h3>
+      <p class="ntl-feature-desc">Control how multiple toasts are displayed.</p>
+      <div class="ntl-queue-controls">
+        <label>Max Toasts: <input type="number" id="maxToasts" value="5" min="1" max="10"></label>
+        <label><input type="checkbox" id="newestOnTop" checked> Newest on Top</label>
+        <label><input type="checkbox" id="preventDuplicates"> Prevent Duplicates</label>
+        <button class="ntl-btn" id="btnApplyConfig">Apply Config</button>
+        <button class="ntl-btn" id="btnSpawnMany">Spawn 5 Toasts</button>
+        <button class="ntl-btn ntl-btn-error" id="btnClearAll">Clear All</button>
+      </div>
+      <pre class="ntl-code-example"><code>NotiToast.config({
+  maxToasts: 5,
+  newestOnTop: true,
+  preventDuplicates: false
+});
+NotiToast.clearAll();</code></pre>
+    </div>
+
+    <!-- 4.3 Action Buttons -->
+    <div class="ntl-feature-box">
+      <h3>Action Buttons</h3>
+      <p class="ntl-feature-desc">Add interactive buttons to your toasts.</p>
+      <button class="ntl-btn" id="btnActions">Show Toast with Actions</button>
+      <pre class="ntl-code-example"><code>new NotiToast({
+  text: 'File deleted',
+  type: 'warning',
+  autoClose: false,
+  actions: [
+    { label: 'Undo', onClick: () => alert('Undone!'), close: true },
+    { label: 'Dismiss', close: true }
+  ]
+}).open();</code></pre>
+    </div>
+
+    <!-- 4.4 Toast Grouping -->
+    <div class="ntl-feature-box">
+      <h3>Toast Grouping</h3>
+      <p class="ntl-feature-desc">Group similar notifications together with a count badge.</p>
+      <button class="ntl-btn" id="btnGroup">Add Grouped Message</button>
+      <span class="ntl-hint">(Click multiple times to see count increase)</span>
+      <pre class="ntl-code-example"><code>new NotiToast({
+  text: 'New message received',
+  type: 'info',
+  group: 'messages',
+  count: 1
+}).open();</code></pre>
+    </div>
+
+    <!-- 4.5 RTL Support -->
+    <div class="ntl-feature-box">
+      <h3>RTL (Right-to-Left) Support</h3>
+      <p class="ntl-feature-desc">Support for RTL languages like Arabic and Hebrew.</p>
+      <button class="ntl-btn" id="btnRTL">Show RTL Toast</button>
+      <pre class="ntl-code-example"><code>new NotiToast({
+  text: 'مرحبا بالعالم! هذا إشعار تجريبي',
+  type: 'info',
+  rtl: true,
+  position: 'top-right'
+}).open();</code></pre>
+    </div>
+
+    <!-- 4.6 Custom Icons -->
+    <div class="ntl-feature-box">
+      <h3>Custom Icons</h3>
+      <p class="ntl-feature-desc">Use your own SVG icons with custom colors.</p>
+      <button class="ntl-btn" id="btnCustomIcon">Show Custom Icon Toast</button>
+      <pre class="ntl-code-example"><code>new NotiToast({
+  text: 'Custom notification',
+  type: 'custom',
+  icon: '&lt;path d="M12 2L1 21h22L12 2z"/&gt;',
+  iconColor: '#ff6600'
+}).open();</code></pre>
+    </div>
+
+    <!-- 4.2 Promise-Based API -->
+    <div class="ntl-feature-box">
+      <h3>Promise-Based API</h3>
+      <p class="ntl-feature-desc">Await toast open/close for sequential operations.</p>
+      <button class="ntl-btn" id="btnPromise">Run Promise Demo</button>
+      <pre class="ntl-code-example"><code>const toast = new NotiToast({ text: 'Loading...' });
+await toast.open();
+console.log('Toast is now visible');
+
+await toast.close();
+console.log('Toast has been removed');</code></pre>
+    </div>
+
+    <!-- 4.8 Stacking Animations -->
+    <div class="ntl-feature-box">
+      <h3>Stacking Animations</h3>
+      <p class="ntl-feature-desc">Smooth repositioning when toasts are removed from the stack.</p>
+      <button class="ntl-btn" id="btnStacking">Spawn Stack (click toasts to see animation)</button>
+      <pre class="ntl-code-example"><code>// Automatic! When a toast in the middle of a stack
+// is closed, remaining toasts animate smoothly.</code></pre>
+    </div>
+
+  </section>
+</main>
 
 </body></html>

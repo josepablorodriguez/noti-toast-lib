@@ -259,9 +259,17 @@ export default class NotiToast {
 	#previouslyFocusedElement;
 
 	#isNotPaused = true;
+	#isPausedByHover = false;
+	#isPausedByFocusLoss = false;
 	#recoverFocus;
-	#handleMouseOver = () => { this.#isNotPaused = false; };
-	#handleMouseLeave = () => { this.#isNotPaused = true; };
+	#handleMouseOver = () => {
+		this.#isPausedByHover = true;
+		this.#updatePauseState();
+	};
+	#handleMouseLeave = () => {
+		this.#isPausedByHover = false;
+		this.#updatePauseState();
+	};
 
 	#customIcon;
 	#position_value;
@@ -497,11 +505,17 @@ export default class NotiToast {
 		if(this.#debug) console.log('SET: text');
 		if(undefined !== value && null !== value && value.length > 0) {
 			this.#text_value = value;
-			const span = document.createElement('span');
-			span.className = 'ntl-toast-message';
-			span.textContent = value;
-			this.#toastElem.innerHTML = '';
-			this.#toastElem.appendChild(span);
+			// Try to update existing message span (preserves icon structure for grouped toasts)
+			const existingSpan = this.#toastElem.querySelector('.ntl-toast-message');
+			if (existingSpan) {
+				existingSpan.textContent = value;
+			} else {
+				const span = document.createElement('span');
+				span.className = 'ntl-toast-message';
+				span.textContent = value;
+				this.#toastElem.innerHTML = '';
+				this.#toastElem.appendChild(span);
+			}
 		}
 	}
 	/**
@@ -603,13 +617,6 @@ export default class NotiToast {
 	set position(value){
 		if(this.#debug) console.log('SET: position');
 		value = validateOption(value, VALID_POSITIONS, 'top-right', 'position');
-
-		// Mirror position for RTL
-		if (this.#isRTL) {
-			value = value.replace('-left', '__LEFT__')
-				.replace('-right', '-left')
-				.replace('__LEFT__', '-right');
-		}
 
 		this.#position_value = value;
 
@@ -879,9 +886,15 @@ export default class NotiToast {
 	#init(){
 		if(this.#debug) console.group('INIT()');
 		this.#checkVisibilityState = ()=>{
-			this.#recoverFocus = document.visibilityState === "visible";
+			const isVisible = document.visibilityState === "visible";
+			this.#recoverFocus = isVisible;
+			this.#isPausedByFocusLoss = !isVisible;
+			this.#updatePauseState();
 		};
 		if(this.#debug) console.groupEnd();
+	}
+	#updatePauseState(){
+		this.#isNotPaused = !this.#isPausedByHover && !this.#isPausedByFocusLoss;
 	}
 	#create(){
 		if(this.#debug) console.group('CREATE()');
@@ -1076,11 +1089,14 @@ export default class NotiToast {
 			if (this.#group) {
 				const existingGroupToast = NotiToast.#groups.get(this.#group);
 				if (existingGroupToast && existingGroupToast.#isVisible) {
-					const newCount = this.#count || ((existingGroupToast.#count || 1) + 1);
-					existingGroupToast.count = newCount;
+					// Set text first (clears innerHTML), then count (adds badge back)
 					if (this.#text_value) {
 						existingGroupToast.text = this.#text_value;
 					}
+					const newCount = this.#count || ((existingGroupToast.#count || 1) + 1);
+					existingGroupToast.count = newCount;
+					// Remove the unused toast element (it was added to DOM by position setter)
+					this.#toastElem.remove();
 					resolve();
 					return;
 				}
